@@ -64,6 +64,24 @@ userSchema.methods = {
         {
             expiresIn: config.JWT_EXPIRY
         })
+    },
+
+    //token shared whenuser clicks forgot pw
+    generateForgotPWToken: function(){
+
+        //generate random token using crypto
+        const forgotToken = crypto.randomBytes(15).toString(hex);
+
+        //save this to DB so that we can compare
+        this.forgotpasswordToken = crypto
+        .createHash("sha256")
+        .update(forgotToken)
+        .digest("hex")
+
+        //20H as expiry time
+        this.forgotpasswordExpiry = Date.now() + 20*60*1000;
+
+        return forgotToken
     }
 }
 
