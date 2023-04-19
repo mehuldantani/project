@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema(
 userSchema.pre("save",async function(next){
     
     //if password is not modified then return next()
-    if(!this.modified("password")) return next()
+    if(!this.ismodified("password")) return next()
 
     //get the encrypted password
     this.password = await bcrypt.hash(this.password,10);
