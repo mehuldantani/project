@@ -1,6 +1,6 @@
 import mongoos from "mongoose";
 import app from "./app";
-import config from "./config/index";
+import config from "./config/config";
 
 //self/Immediately Invoked Function Expression (IIFY)
 //create a function and execute immediately
