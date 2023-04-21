@@ -4,7 +4,7 @@ import asyncHandler from '../services/async_handler.js'
 import CustomError from "../utils/custom_error.js"
 import JWT from "jsonwebtoken"
 
-export const isloogedin = asyncHandler(async(req,res,next)=>{
+export const isloogedin = asyncHandler(async(req,_res,next)=>{
     let token;
 
     if (
