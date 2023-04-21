@@ -2,7 +2,8 @@ import user_schema from "../model/user_schema.js";
 import User from "../model/user_schema.js"
 import asyncHandler from '../services/async_handler.js'
 import customerror from '../utils/custom_error.js'
-import email from "../utils/email.js"
+import emailsend from "../utils/email.js"
+import crypto from "crypto"
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3*24*60*60*1000),
@@ -166,7 +167,7 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
 
     //send and email
     try {
-        await email({
+        await emailsend({
             email: user.email,
             subject: "Reset password - Mehul",
             text:text
@@ -185,4 +186,61 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
         
         throw new customerror('Failed',400)
     }
+})
+
+/******************************************************
+ * @RESET_PASSWORD
+ * @route http://localhost:4000/api/auth/password/forgot/:resetToken
+ * @description user will able to reset pw based on url token
+ * @parameters  toekn, password and confirm password
+ * @returns Success message
+ ********************************************************/
+
+export const resetPassword = asyncHandler(async(req,res)=>{
+
+    //get token from the url
+    const {token: resetToken} = req.params
+
+    //get password and confirm password from body
+    const {password,confirmPassword} = req.body
+
+    if (password !== confirmPassword) {
+        throw new customerror('Passwords are not matching',400)
+    }
+
+    const resetPasswordToken =  crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex')
+
+    //find user with same token and valid expiry time
+    const userFound = user.findOne({
+        forgotpasswordToken: resetPasswordToken,
+        forgotpasswordExpiry: {$gt: Date.now()}
+    })
+
+    //send response
+    if(!userFound){
+        throw new customerror("URL Expired",400)
+    }
+
+    //update detail, password not excrypted here because it is handled in schema
+    userFound.password = password
+    userFound.forgotpasswordToken = undefined
+    userFound.forgotpasswordExpiry = undefined
+
+    //save to DB
+    await user.save()
+
+    //set token
+    const token = user.getJwtToken()
+    user.password = undefined
+
+    res.cookie("token",token,cookieOptions)
+    res.status(200).json({
+        success:true,
+        message: 'Password Reset successfully.'
+    })
+
+
 })
