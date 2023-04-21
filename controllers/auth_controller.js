@@ -51,4 +51,75 @@ export const signUp = asyncHandler(async (req,res) => {
         user
     })
 
+});
+
+/******************************************************
+ * @LOGIN
+ * @route http://localhost:4000/api/auth/login
+ * @description User login controller for loggin in a user
+ * @parameters email,password
+ * @returns User Object with token
+ ********************************************************/
+
+export const login = asyncHandler(async (req,resp) =>{
+    const {email,password} = req.body
+
+    //validation
+    if (!(email || password)){
+        throw new customerror('Email and password is required for Login.',400)
+    }
+
+    //check with user and password
+    //select will include password in the returned object, did this because we kept select property False in schema design
+    const userExists = User.findOne({email}).select("+password")
+
+    if(!userExists){
+        throw new customerror('Invalid Credentials.',400)
+    }
+
+    //match the password
+    const isPWmatched =  await user.comparePasssword(password)
+
+    if (!isPWmatched){
+        throw new customerror('Invalid Credentials.',400)
+    }
+
+    //get token
+    const token = user.getJwtToken()
+    user.password = undefined
+
+    //send response
+    res.cookie("token",token,cookieOptions)
+    res.status(200).json({
+        success: true,
+        token,
+        user
+    })
+
+
+})
+
+/******************************************************
+ * @LOGOUT
+ * @route http://localhost:4000/api/auth/logout
+ * @description User logout by clearing cookies token
+ * @parameters
+ * @returns Success
+ ********************************************************/
+
+// kept req -> _req which is a symbol that this parameter is not used, just a preferrence not a standard
+export const logout = asyncHandler(async (_req,res) =>{
+    //reset token
+    //    res.clearCookie() -> this can also be used
+    res.cookie("token",null,
+    {
+        expires: new Date(Date.now()),
+        httponly: true
+    })
+
+    //send response
+    res.status(200).json({
+        success:true,
+        message: "Logged Out"
+    })
 })
