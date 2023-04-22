@@ -17,7 +17,13 @@ const config = {
     SMTP_MAIL_PORT: process.env.SMTP_MAIL_PORT,
     SMTP_MAIL_UN: process.env.SMTP_MAIL_UN,
     SMTP_MAIL_PW: process.env.SMTP_MAIL_PW,
-    SMTP_MAIL_EMAIL: process.env.SMTP_MAIL_EMAIL
+    SMTP_MAIL_EMAIL: process.env.SMTP_MAIL_EMAIL,
+
+    //AWS configs
+    S3_ACCESS_KEY:process.env.S3_ACCESS_KEY,
+    S3_SECRET_ACCESS_KEY:process.env.S3_SECRET_ACCESS_KEY,
+    S3_BUCKET_NAME:process.env.S3_BUCKET_NAME,
+    S3_REGION:process.env.S3_REGION,
 }
 
 export default config
