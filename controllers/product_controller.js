@@ -88,3 +88,53 @@ export const addProduct = asyncHandler(async (req,res)=>{
             }
         })
 })
+
+/******************************************************
+ * @Get_product   POST request
+ * @route http://localhost:4000/api/product
+ * @description list of all products
+ * @parameters product details
+ * @returns User Object 
+ ********************************************************/
+
+export const getAllProducts = asyncHandler(async(req,res)=>{
+    //get all the products
+    const products = await product_schema.find({})
+
+    if(!products){
+        throw new customerror("No Products Found",400)
+    }
+
+    res.status(200).json({
+        success:true,
+        products
+    })
+
+})
+
+/******************************************************
+ * @getproducbyid   POST request
+ * @route http://localhost:4000/api/product
+ * @description find specific product
+ * @parameters product details
+ * @returns User Object 
+ ********************************************************/
+
+export const getProductById = asyncHandler(async(req,res)=>{
+    //get and ID
+    const {id:productid} = req.params
+
+    //find product by ID
+    const products = await product_schema.findById({productid})
+
+    if(!products){
+        throw new customerror("No Products Found",400)
+    }
+    //send respoinse
+    res.status(200).json({
+        success:true,
+        products
+    })
+
+})
+
