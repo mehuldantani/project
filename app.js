@@ -1,10 +1,10 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import morgan from "morgan";
-import mongoos from "mongoose";
-import config from "./config/config";
-import routes from "./routes/index"
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+const mongoos = require("mongoose");
+const config = require("./config/config");
+const routes = require("./routes/index");
 
 //initiate express instance
 const app = express()
@@ -52,4 +52,4 @@ app.all("*", (_req, res) => {
     })
 })
 
-export default app
+module.exports = app
