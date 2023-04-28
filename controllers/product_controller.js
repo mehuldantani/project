@@ -138,3 +138,50 @@ export const getProductById = asyncHandler(async(req,res)=>{
 
 })
 
+export const getProductbyCollectionId = asyncHandler(async(req,res)=>{
+    
+    //get collection ID
+    const {id: collectionId} = req.params
+
+    //find all products with collection ID
+    const products = product_schema.find({collectionId})
+
+    if(!products){
+        throw new customerror("No Products found this category.")
+    }
+
+    res.status(200).json({
+        success:true,
+        products
+    })
+})
+
+export const deleteProduct = asyncHandler(async(req,res)=>{
+
+    const {id: productID} = req.params
+
+    const product = await product_schema.findById(productID)
+
+    if(!product){
+        throw new CustomError("No product found", 404)
+    }
+
+    const deletephotosfromS3 = promise.all(
+        product.photos.map(async(element,index)=>{
+            await s3filedelete({
+                bucketName: config.S3_BUCKET_NAME,
+                key:`products/${product._id.tostring()}/photo_${index +1}.png`
+            })
+        })
+    )
+
+    await deletephotosfromS3
+
+    await product.remove()
+
+    res.status(200).json({
+        success:true,
+        message: "Product has been deleted successfully."
+    })
+
+})
