@@ -15,7 +15,7 @@ const islogedin = asyncHandler(async(req,_res,next)=>{
     }
 
     if(!token){
-        throw new CustomError('Not Authorized to access this route.',400)
+        throw new CustomError('Token Validation Failed. Please Login in order to use this route.',400)
     }
 
     try {

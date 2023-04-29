@@ -3,6 +3,7 @@ const config = require("../config/config")
 
 
 const email = async (options) =>{
+
     const message = {
         from: config.SMTP_MAIL_EMAIL,
         to: options.email,
@@ -10,8 +11,11 @@ const email = async (options) =>{
         text: options.text
        // html:"<b>Hello There!!!<b>"
         }
-
-    await transporter.sendmail(message)
+    try {
+        await transporter.sendmail(message)
+    } catch (error) {
+        console.log('Error While Sending Email.')
+    }
 }
 
 module.exports = email

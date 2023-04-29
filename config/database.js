@@ -3,7 +3,7 @@ const config = require("./config.js");
 
 // URL to connect to mongoDB
 const MONGODB_URL = config.MONGODB_URL
-console.log(MONGODB_URL)
+
 // export function that can be used in other files to connect the db.
 exports.connect = () => {
     // connect to db

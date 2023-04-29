@@ -22,12 +22,13 @@ const signUp = asyncHandler(async (req,res) => {
 
     //validation
     if (!(name || email || password)){
-        throw new customerror('Please fill all the fields',400)
+        throw new customerror('Name, Email and Password Required for Signup.',400)
     }
 
     //check if user exists
-    const existingUser = User.findOne({email})
+    console.log(email,password)
 
+    const existingUser = await User.findOne({email})
     if(existingUser){
         throw new customerror('User already exists please use signup option',400)
     }
@@ -42,7 +43,7 @@ const signUp = asyncHandler(async (req,res) => {
 
     //get token from schema
     const token = user.getJwtToken()
-    console.log(user)
+    //console.log(user)
     //need to do this as select false will only apply when selecitng and not when Creating
     user.password = undefined
 
@@ -73,29 +74,29 @@ const login = asyncHandler(async (req,resp) =>{
 
     //check with user and password
     //select will include password in the returned object, did this because we kept select property False in schema design
-    const userExists = User.findOne({email}).select("+password")
+    const userExists = await User.findOne({email}).select("+password")
 
     if(!userExists){
         throw new customerror('Invalid Credentials.',400)
     }
 
     //match the password
-    const isPWmatched =  await user.comparePasssword(password)
+    const isPWmatched =  await userExists.comparePasssword(password)
 
     if (!isPWmatched){
         throw new customerror('Invalid Credentials.',400)
     }
 
     //get token
-    const token = user.getJwtToken()
-    user.password = undefined
+    const token = userExists.getJwtToken()
+    userExists.password = undefined
 
     //send response
-    res.cookie("token",token,cookieOptions)
-    res.status(200).json({
+    resp.cookie("token",token,cookieOptions)
+    resp.status(200).json({
         success: true,
         token,
-        user
+        userExists
     })
 
 
@@ -135,7 +136,6 @@ const logout = asyncHandler(async (_req,res) =>{
  ********************************************************/
 
 const forgotPassword = asyncHandler(async(req,res)=>{
-
     const {email} = req.body
 
     //validation
@@ -144,7 +144,7 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     }
 
     //check if user exists
-    const existingUser = User.findOne({email})
+    const existingUser = await User.findOne({email})
 
     //if user not found then return
     if(!existingUser){
@@ -152,10 +152,10 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     }
 
     //get forgot pw token
-    const resetToken = user.generateForgotPWToken()
+    const resetToken = existingUser.generateForgotPWToken()
 
     //savve info in DB
-    await user.save({validateBeforeSave: false})
+    await existingUser.save({validateBeforeSave: false})
 
     //generate reset password url
     const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/password/forgot/${resetToken}`
@@ -163,11 +163,10 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     //email content
     const text = `Your Password reset url is 
     \n\n ${resetUrl}\n\n`
-
     //send and email
     try {
         await emailsend({
-            email: user.email,
+            email: existingUser.email,
             subject: "Reset password - Mehul",
             text:text
         })
@@ -180,8 +179,8 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     } catch (err) {
 
         //Rollback the chanes on email failure
-        user.forgotpasswordExpiry = undefined
-        user.forgotpasswordToken = undefined
+        existingUser.forgotpasswordExpiry = undefined
+        existingUser.forgotpasswordToken = undefined
         
         throw new customerror('Failed',400)
     }
