@@ -9,7 +9,7 @@ const customError = require("../utils/custom_error.js")
  * @description Only admin and Moderator can create the coupon
  * @returns Coupon Object with success message "Coupon Created SuccessFully"
  *********************************************************/
-exports.createCoupon = asyncHandler(async(req,resp)=>{
+const createCoupon = asyncHandler(async(req,resp)=>{
     //get params
     const {code,discount} = req.body
 
@@ -43,7 +43,7 @@ exports.createCoupon = asyncHandler(async(req,resp)=>{
  * @returns Coupon Object with success message "Coupon Deactivated SuccessFully"
  *********************************************************/
 
-exports.deactiveCoupon = asyncHandler(async(req,res)=>{
+const deactiveCoupon = asyncHandler(async(req,res)=>{
     //get couponID
     const  {id: couponId} = req.params
 
@@ -76,7 +76,7 @@ exports.deactiveCoupon = asyncHandler(async(req,res)=>{
  * @description Only admin and Moderator can update the coupon
  * @returns Success Message "Coupon updated SuccessFully"
  *********************************************************/
-exports.updateCoupon = asyncHandler(async(req,res)=>{
+const updateCoupon = asyncHandler(async(req,res)=>{
     //get couponID
     const  {id: couponId} = req.params
     const {code,discount} = req.body
@@ -112,7 +112,7 @@ exports.updateCoupon = asyncHandler(async(req,res)=>{
  * @returns Success Message "Coupon Deleted SuccessFully"
  *********************************************************/
 
-exports.deleteCoupon = asyncHandler(async(req,res)=>{
+const deleteCoupon = asyncHandler(async(req,res)=>{
     //get couponID
     const  {id: couponId} = req.params
     
@@ -141,7 +141,7 @@ exports.deleteCoupon = asyncHandler(async(req,res)=>{
  * @returns allCoupons Object
  *********************************************************/
 
-exports.getAllCoupons = asyncHandler(async(req,res)=>{
+const getAllCoupons = asyncHandler(async(req,res)=>{
     const coupons = coupon_schema.find({})
 
     if(!coupons){
@@ -152,3 +152,5 @@ exports.getAllCoupons = asyncHandler(async(req,res)=>{
         coupons
     })
 })
+
+module.exports = {createCoupon,deactiveCoupon,deleteCoupon,getAllCoupons,updateCoupon}

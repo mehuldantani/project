@@ -19,7 +19,7 @@ const order_schema = require("../model/order_schema.js")
  ********************************************************/
 
 //generate razorpay order ID
-exports.generateRazorpayID = asyncHandler(async(req,res)=>{
+const generateRazorpayID = asyncHandler(async(req,res)=>{
     //get product and coupon
     const {products,couponCode} = req.body
 
@@ -85,7 +85,7 @@ exports.generateRazorpayID = asyncHandler(async(req,res)=>{
 })
 
 //create order in DB
-exports.generateOrder = asyncHandler(async(req,res)=>{
+const generateOrder = asyncHandler(async(req,res)=>{
     const {razorpayOrderId,userid,phoneNumber,products,coupon,amount} = req.body
 
     const dbUser = user_schema.findById({userid})
@@ -124,7 +124,7 @@ exports.generateOrder = asyncHandler(async(req,res)=>{
 })
 
 //get my orders
-exports.getMyOrders = asyncHandler(async(req, res) => {
+const getMyOrders = asyncHandler(async(req, res) => {
     const {id:userId} = req.params
 
     const myOrders = order_schema.findOne({user:userId})
@@ -141,7 +141,7 @@ exports.getMyOrders = asyncHandler(async(req, res) => {
 })
 
 //Todo: get all my orders: Admin
-exports.getAllOrders = asyncHandler(async(req, res) => {
+const getAllOrders = asyncHandler(async(req, res) => {
     const allOrders = order_schema.find()
 
     if(!allOrders){
@@ -157,7 +157,7 @@ exports.getAllOrders = asyncHandler(async(req, res) => {
 
 
 //Todo: update order Status: Admin
-exports.updateOrderStatus = asyncHandler(async(req, res) => {
+const updateOrderStatus = asyncHandler(async(req, res) => {
     const{id: orderId} = req.params
     const{status} = req.body
 
@@ -180,3 +180,5 @@ exports.updateOrderStatus = asyncHandler(async(req, res) => {
     })
     
 })
+
+module.exports = {generateRazorpayID,generateOrder,getAllOrders,getMyOrders,updateOrderStatus}

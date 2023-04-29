@@ -1,7 +1,7 @@
 const s3 = require("../utils/aws.js")
 
 //upload a file
-exports.s3fileupload = async({
+const s3fileupload = async({
     bucketName,key,body,contentType
 }) =>{
     return await s3.upload({
@@ -14,7 +14,7 @@ exports.s3fileupload = async({
 }
 
 //delete a file
-exports.s3filedelete = async({bucketName,key}) =>{
+const s3filedelete = async({bucketName,key}) =>{
 
     return await s3.deleteObject({
         Bucket:bucketName,
@@ -23,3 +23,5 @@ exports.s3filedelete = async({bucketName,key}) =>{
     .promise()
 
 }
+
+module.exports = {s3filedelete,s3fileupload}

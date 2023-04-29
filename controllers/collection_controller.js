@@ -10,7 +10,7 @@ const customerror = require( '../utils/custom_error.js')
  * @returns User Object 
  ********************************************************/
 
-exports.createCollection = asyncHandler(async (req,res)=>{
+const createCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton name
     const {name} = req.body
@@ -42,7 +42,7 @@ exports.createCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-exports.updateCollection = asyncHandler(async (req,res)=>{
+const updateCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton name
     const {name} = req.body
@@ -85,7 +85,7 @@ exports.updateCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-exports.deleteCollection = asyncHandler(async (req,res)=>{
+const deleteCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton id
     const {id: collectionid} = req.params
@@ -117,7 +117,7 @@ exports.deleteCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-exports.getCollection = asyncHandler(async(req,res)=>{
+const getCollection = asyncHandler(async(req,res)=>{
     
     //get all the collection
     const allCollections = await collection_schema.find()
@@ -134,3 +134,5 @@ exports.getCollection = asyncHandler(async(req,res)=>{
     })
 
 })
+
+module.exports = {createCollection,deleteCollection,updateCollection,getCollection}

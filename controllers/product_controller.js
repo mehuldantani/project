@@ -17,7 +17,7 @@ const formidable = require("formidable")
  * @returns User Object 
  ********************************************************/
 
-exports.addProduct = asyncHandler(async (req,res)=>{
+const addProduct = asyncHandler(async (req,res)=>{
         const form = formidable({
             multiples:true,
             keepExtensions:true
@@ -97,7 +97,7 @@ exports.addProduct = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-exports.getAllProducts = asyncHandler(async(req,res)=>{
+const getAllProducts = asyncHandler(async(req,res)=>{
     //get all the products
     const products = await product_schema.find({})
 
@@ -120,7 +120,7 @@ exports.getAllProducts = asyncHandler(async(req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-exports.getProductById = asyncHandler(async(req,res)=>{
+const getProductById = asyncHandler(async(req,res)=>{
     //get and ID
     const {id:productid} = req.params
 
@@ -138,7 +138,7 @@ exports.getProductById = asyncHandler(async(req,res)=>{
 
 })
 
-exports.getProductbyCollectionId = asyncHandler(async(req,res)=>{
+const getProductbyCollectionId = asyncHandler(async(req,res)=>{
     
     //get collection ID
     const {id: collectionId} = req.params
@@ -156,7 +156,7 @@ exports.getProductbyCollectionId = asyncHandler(async(req,res)=>{
     })
 })
 
-exports.deleteProduct = asyncHandler(async(req,res)=>{
+const deleteProduct = asyncHandler(async(req,res)=>{
 
     const {id: productID} = req.params
 
@@ -185,3 +185,5 @@ exports.deleteProduct = asyncHandler(async(req,res)=>{
     })
 
 })
+
+module.exports = {getAllProducts,getProductById,getProductbyCollectionId,addProduct,deleteProduct}
