@@ -1,12 +1,12 @@
-import product_schema from "../model/product_shcema.js"
-import {s3fileupload,s3filedelete} from "../services/file_upload.js"
-import asyncHandler from '../services/async_handler.js'
-import customerror from '../utils/custom_error.js'
-import config from "../config/config.js"
+const product_schema = require("../model/product_shcema.js")
+const {s3fileupload,s3filedelete} = require("../services/file_upload.js")
+const asyncHandler = require('../services/async_handler.js')
+const customerror = require('../utils/custom_error.js')
+const config = require("../config/config.js")
 
-import mongoose from "mongoose"
-import fs from "fs"
-import formidable from "formidable"
+const mongoose = require("mongoose")
+const fs = require("fs")
+const formidable = require("formidable")
 
 
 /******************************************************
@@ -17,7 +17,7 @@ import formidable from "formidable"
  * @returns User Object 
  ********************************************************/
 
-export const addProduct = asyncHandler(async (req,res)=>{
+exports.addProduct = asyncHandler(async (req,res)=>{
         const form = formidable({
             multiples:true,
             keepExtensions:true
@@ -97,7 +97,7 @@ export const addProduct = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-export const getAllProducts = asyncHandler(async(req,res)=>{
+exports.getAllProducts = asyncHandler(async(req,res)=>{
     //get all the products
     const products = await product_schema.find({})
 
@@ -120,7 +120,7 @@ export const getAllProducts = asyncHandler(async(req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-export const getProductById = asyncHandler(async(req,res)=>{
+exports.getProductById = asyncHandler(async(req,res)=>{
     //get and ID
     const {id:productid} = req.params
 
@@ -138,7 +138,7 @@ export const getProductById = asyncHandler(async(req,res)=>{
 
 })
 
-export const getProductbyCollectionId = asyncHandler(async(req,res)=>{
+exports.getProductbyCollectionId = asyncHandler(async(req,res)=>{
     
     //get collection ID
     const {id: collectionId} = req.params
@@ -156,7 +156,7 @@ export const getProductbyCollectionId = asyncHandler(async(req,res)=>{
     })
 })
 
-export const deleteProduct = asyncHandler(async(req,res)=>{
+exports.deleteProduct = asyncHandler(async(req,res)=>{
 
     const {id: productID} = req.params
 

@@ -1,5 +1,4 @@
-import dotenv from "dotenv"
-
+const dotenv  = require("dotenv")
 //set global variable config
 dotenv.config()
 
@@ -30,4 +29,4 @@ const config = {
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET
 }
 
-export default config
+module.exports = config;

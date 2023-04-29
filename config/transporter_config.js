@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer"
-import config from "./config"
+const nodemailer = require("nodemailer")
+const config = require("./config")
 
 let transporter = nodemailer.createTransport({
     host: config.SMTP_MAIL_HOST,
@@ -10,3 +10,5 @@ let transporter = nodemailer.createTransport({
       pass: config.SMTP_MAIL_PW
     },
   });
+
+module.exports = transporter

@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
-import AuthRoles from '../utils/authroles'
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
-import crypto from "crypto"     //This  is default package comes with Nodejs.
-import config from "../config/index"
+const mongoose = require("mongoose")
+const AuthRoles = require('../utils/authroles')
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const crypto = require("crypto")     //This  is default package comes with Nodejs.
+const config = require("../config/config")
 
 //create a userschema for userinfomation
 const userSchema = mongoose.Schema(
@@ -85,4 +85,4 @@ userSchema.methods = {
     }
 }
 
-export default mongoose.model("user",userSchema);
+module.exports = mongoose.model("user",userSchema);

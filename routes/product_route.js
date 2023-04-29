@@ -1,7 +1,7 @@
-import {Router} from "express"
-import {addProduct,deleteProduct,getAllProducts,getProductById,getProductbyCollectionId} from "../controllers/product_controller"
-import {islogedin,authorize} from "../middlewares/auth_middleware"
-import {AuthRoles} from "../utils/authroles"
+const {Router} = require("express")
+const {addProduct,deleteProduct,getAllProducts,getProductById,getProductbyCollectionId} = require("../controllers/product_controller")
+const {islogedin,authorize} = require("../middlewares/auth_middleware")
+const {AuthRoles} = require("../utils/authroles")
 
 const router = Router()
 
@@ -16,6 +16,4 @@ router.get("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getPr
 //get collection wise product
 router.get("/collection/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductbyCollectionId)
 
-
-
-export default router;
+module.exports = router

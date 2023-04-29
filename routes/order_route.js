@@ -1,7 +1,7 @@
-import {Router} from "express"
-import {generateOrder,generateRazorpayID,getAllOrders,getMyOrders,updateOrderStatus} from "../controllers/order_controller"
-import {islogedin,authorize} from "../middlewares/auth_middleware"
-import {AuthRoles} from "../utils/authroles"
+const {Router} = require("express")
+const {generateOrder,generateRazorpayID,getAllOrders,getMyOrders,updateOrderStatus} = require("../controllers/order_controller")
+const {islogedin,authorize} = require("../middlewares/auth_middleware")
+const {AuthRoles} = require("../utils/authroles")
 
 const router = Router()
 
@@ -18,4 +18,4 @@ router.get("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR,AuthRo
 //update order status
 router.put("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),updateOrderStatus)
 
-export default router;
+module.exports = router;

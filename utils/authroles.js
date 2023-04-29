@@ -1,5 +1,5 @@
 //types of Roles that are currently offered in out app.
-export const AuthRoles = {
+exports.AuthRoles = {
     ADMIN : "ADMIN",
     MODERATOR : "MODERATOR",
     USER: "USER"

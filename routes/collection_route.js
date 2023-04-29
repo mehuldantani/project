@@ -1,7 +1,7 @@
-import {Router} from "express"
-import {createCollection,deleteCollection,getCollection,updateCollection} from "../controllers/collection_controller"
-import {islogedin,authorize} from "../middlewares/auth_middleware"
-import {AuthRoles} from "../utils/authroles"
+const {Router} = require("express")
+const {createCollection,deleteCollection,getCollection,updateCollection} = require("../controllers/collection_controller")
+const {islogedin,authorize} = require("../middlewares/auth_middleware")
+const {AuthRoles} = require("../utils/authroles")
 
 //create router instance
 const router = Router()
@@ -16,4 +16,4 @@ router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN),deleteCollection)
 //show all collection
 router.get("/",getCollection)
 
-export default router;
+module.exports = router

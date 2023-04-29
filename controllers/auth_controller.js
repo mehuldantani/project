@@ -1,11 +1,10 @@
-import user_schema from "../model/user_schema.js";
-import User from "../model/user_schema.js"
-import asyncHandler from '../services/async_handler.js'
-import customerror from '../utils/custom_error.js'
-import emailsend from "../utils/email.js"
-import crypto from "crypto"
+const User = require("../model/user_schema.js")
+const asyncHandler = require('../services/async_handler.js')
+const customerror = require('../utils/custom_error.js')
+const emailsend = require("../utils/email.js")
+const crypto = require("crypto")
 
-export const cookieOptions = {
+exports.cookieOptions = {
     expires: new Date(Date.now() + 3*24*60*60*1000),
     httpOnly: true
 }
@@ -18,7 +17,7 @@ export const cookieOptions = {
  * @returns User Object
  ********************************************************/
 
-export const signUp = asyncHandler(async (req,res) => {
+exports.signUp = asyncHandler(async (req,res) => {
     const {name,email,password} = req.body
 
     //validation
@@ -64,7 +63,7 @@ export const signUp = asyncHandler(async (req,res) => {
  * @returns User Object with token
  ********************************************************/
 
-export const login = asyncHandler(async (req,resp) =>{
+exports.login = asyncHandler(async (req,resp) =>{
     const {email,password} = req.body
 
     //validation
@@ -111,7 +110,7 @@ export const login = asyncHandler(async (req,resp) =>{
  ********************************************************/
 
 // kept req -> _req which is a symbol that this parameter is not used, just a preferrence not a standard
-export const logout = asyncHandler(async (_req,res) =>{
+exports.logout = asyncHandler(async (_req,res) =>{
     //reset token
     //    res.clearCookie() -> this can also be used
     res.cookie("token",null,
@@ -135,7 +134,7 @@ export const logout = asyncHandler(async (_req,res) =>{
  * @returns Success message - email send to your email
  ********************************************************/
 
-export const forgotPassword = asyncHandler(async(req,res)=>{
+exports.forgotPassword = asyncHandler(async(req,res)=>{
 
     const {email} = req.body
 
@@ -196,7 +195,7 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
  * @returns Success message
  ********************************************************/
 
-export const resetPassword = asyncHandler(async(req,res)=>{
+exports.resetPassword = asyncHandler(async(req,res)=>{
 
     //get token from the url
     const {token: resetToken} = req.params
@@ -253,7 +252,7 @@ export const resetPassword = asyncHandler(async(req,res)=>{
  * @returns Success message
  ********************************************************/
 
-export const getProfile = asyncHandler(async(req,res)=>{
+exports.getProfile = asyncHandler(async(req,res)=>{
     const {user} = req
 
     //check user

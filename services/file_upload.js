@@ -1,7 +1,7 @@
-import s3 from "../utils/aws.js"
+const s3 = require("../utils/aws.js")
 
 //upload a file
-export const s3fileupload = async({
+exports.s3fileupload = async({
     bucketName,key,body,contentType
 }) =>{
     return await s3.upload({
@@ -14,7 +14,7 @@ export const s3fileupload = async({
 }
 
 //delete a file
-export const s3filedelete = async({bucketName,key}) =>{
+exports.s3filedelete = async({bucketName,key}) =>{
 
     return await s3.deleteObject({
         Bucket:bucketName,

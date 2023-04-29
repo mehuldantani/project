@@ -9,7 +9,7 @@ const asyncHandler = (fn) => async (req,resp,next) => {
     }
 }
 
-export default asyncHandler
+module.exports = asyncHandler
 
 //explanation
 // const asyncHandler = () => {};

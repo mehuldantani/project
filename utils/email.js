@@ -1,5 +1,5 @@
-import transporter from "../config/transporter_config"
-import config from "../config/config"
+const transporter = require("../config/transporter_config")
+const config = require("../config/config")
 
 
 const email = async (options) =>{
@@ -14,4 +14,4 @@ const email = async (options) =>{
     await transporter.sendmail(message)
 }
 
-export default email
+module.exports = email

@@ -1,7 +1,7 @@
-import {Router} from "express"
-import {createCoupon,deleteCoupon,deactiveCoupon,getAllCoupons,updateCoupon} from "../controllers/coupon_controller"
-import {islogedin,authorize} from "../middlewares/auth_middleware"
-import {AuthRoles} from "../utils/authroles"
+const {Router} = require("express")
+const {createCoupon,deleteCoupon,deactiveCoupon,getAllCoupons,updateCoupon} = require("../controllers/coupon_controller")
+const {islogedin,authorize} = require("../middlewares/auth_middleware")
+const {AuthRoles} = require("../utils/authroles")
 
 //create router instance
 const router = Router()
@@ -18,4 +18,4 @@ router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN),deleteCoupon)
 //get all coupons
 router.get("/",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getAllCoupons)
 
-export default router;
+module.exports = router

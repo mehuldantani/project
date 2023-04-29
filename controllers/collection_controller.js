@@ -1,6 +1,6 @@
-import collection_schema from "../model/collection_schema.js"
-import asyncHandler from '../services/async_handler.js'
-import customerror from '../utils/custom_error.js'
+const collection_schema = require( "../model/collection_schema.js")
+const asyncHandler = require( '../services/async_handler.js')
+const customerror = require( '../utils/custom_error.js')
 
 /******************************************************
  * @Create_collection   POST request
@@ -10,7 +10,7 @@ import customerror from '../utils/custom_error.js'
  * @returns User Object 
  ********************************************************/
 
-export const createCollection = asyncHandler(async (req,res)=>{
+exports.createCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton name
     const {name} = req.body
@@ -42,7 +42,7 @@ export const createCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-export const updateCollection = asyncHandler(async (req,res)=>{
+exports.updateCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton name
     const {name} = req.body
@@ -85,7 +85,7 @@ export const updateCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-export const deleteCollection = asyncHandler(async (req,res)=>{
+exports.deleteCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton id
     const {id: collectionid} = req.params
@@ -117,7 +117,7 @@ export const deleteCollection = asyncHandler(async (req,res)=>{
  * @returns User Object 
  ********************************************************/
 
-export const getCollection = asyncHandler(async(req,res)=>{
+exports.getCollection = asyncHandler(async(req,res)=>{
     
     //get all the collection
     const allCollections = await collection_schema.find()
