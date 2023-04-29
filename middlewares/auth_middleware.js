@@ -4,7 +4,7 @@ const asyncHandler = require('../services/async_handler.js')
 const CustomError = require("../utils/custom_error.js")
 const JWT = require("jsonwebtoken")
 
-exports.islogedin = asyncHandler(async(req,_res,next)=>{
+const islogedin = asyncHandler(async(req,_res,next)=>{
     let token;
 
     if (
@@ -32,9 +32,11 @@ exports.islogedin = asyncHandler(async(req,_res,next)=>{
 })
 
 //to check for roles
-exports.authorize = (...requiredRoles) => asyncHandler( async (req, _res, next) => {
+const authorize = (...requiredRoles) => asyncHandler( async (req, _res, next) => {
     if (!requiredRoles.includes(req.user.role)) {
         throw new CustomError("You are not authorized to access this resource")
     }
     next()
 })
+
+module.exports = {islogedin,authorize}

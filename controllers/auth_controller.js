@@ -4,7 +4,7 @@ const customerror = require('../utils/custom_error.js')
 const emailsend = require("../utils/email.js")
 const crypto = require("crypto")
 
-exports.cookieOptions = {
+const cookieOptions = {
     expires: new Date(Date.now() + 3*24*60*60*1000),
     httpOnly: true
 }
@@ -17,7 +17,7 @@ exports.cookieOptions = {
  * @returns User Object
  ********************************************************/
 
-exports.signUp = asyncHandler(async (req,res) => {
+const signUp = asyncHandler(async (req,res) => {
     const {name,email,password} = req.body
 
     //validation
@@ -63,7 +63,7 @@ exports.signUp = asyncHandler(async (req,res) => {
  * @returns User Object with token
  ********************************************************/
 
-exports.login = asyncHandler(async (req,resp) =>{
+const login = asyncHandler(async (req,resp) =>{
     const {email,password} = req.body
 
     //validation
@@ -110,7 +110,7 @@ exports.login = asyncHandler(async (req,resp) =>{
  ********************************************************/
 
 // kept req -> _req which is a symbol that this parameter is not used, just a preferrence not a standard
-exports.logout = asyncHandler(async (_req,res) =>{
+const logout = asyncHandler(async (_req,res) =>{
     //reset token
     //    res.clearCookie() -> this can also be used
     res.cookie("token",null,
@@ -134,7 +134,7 @@ exports.logout = asyncHandler(async (_req,res) =>{
  * @returns Success message - email send to your email
  ********************************************************/
 
-exports.forgotPassword = asyncHandler(async(req,res)=>{
+const forgotPassword = asyncHandler(async(req,res)=>{
 
     const {email} = req.body
 
@@ -195,7 +195,7 @@ exports.forgotPassword = asyncHandler(async(req,res)=>{
  * @returns Success message
  ********************************************************/
 
-exports.resetPassword = asyncHandler(async(req,res)=>{
+const resetPassword = asyncHandler(async(req,res)=>{
 
     //get token from the url
     const {token: resetToken} = req.params
@@ -252,7 +252,7 @@ exports.resetPassword = asyncHandler(async(req,res)=>{
  * @returns Success message
  ********************************************************/
 
-exports.getProfile = asyncHandler(async(req,res)=>{
+const getProfile = asyncHandler(async(req,res)=>{
     const {user} = req
 
     //check user
@@ -267,3 +267,5 @@ exports.getProfile = asyncHandler(async(req,res)=>{
     })
 
 })
+
+module.exports = {cookieOptions,getProfile,forgotPassword,login,logout,resetPassword,signUp };

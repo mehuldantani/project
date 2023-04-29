@@ -1,6 +1,6 @@
 const Router = require("express")
 const {forgotPassword,getProfile,login,logout,resetPassword,signUp} = require("../controllers/auth_controller")
-const islogedin = require("../middlewares/auth_middleware")
+const {islogedin} = require("../middlewares/auth_middleware")
 
 //create router instance
 const router = Router()
