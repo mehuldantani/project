@@ -9,7 +9,7 @@ const user_schema = require("../model/user_schema.js")
 const { CustomerProfiles } = require("aws-sdk")
 const CustomError = require("../utils/custom_error.js")
 const order_schema = require("../model/order_schema.js")
-
+const mongoose = require("mongoose")
 /******************************************************
  * @Generate_razorpay_id   POST request
  * @route http://localhost:4000/api/order/razorpay
@@ -28,20 +28,17 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
         throw new customError("No Products Found.",400)
     }
 
-    let totalAmount;
+    let totalAmount = 0;
 
-    let productPriceCal = promise.all(products.map(
+    let productPriceCal = Promise.all(products.map(
         async(product) =>{
             const {productId,count} = product
-
             //check product with DB
-            const dbProduct = product_shcema.findById({productId})
-
+            const dbProduct = await product_shcema.findById(productId)
             if(!dbProduct){
                 throw new customError("No Product Found.",400)
             }
-
-            totalAmount += dbProduct.price*count
+            totalAmount = totalAmount + dbProduct.price * count
         }
     ))
 
@@ -49,19 +46,16 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
     await productPriceCal
 
     let discountAmount = 0;
-    
+    console.log(totalAmount)
     //if coupon exists then apply coupon code
     if(couponCode.length > 0){
         //verify couponcode in db
-        const dbCoupon = coupon_schema.findOne({code: couponCode})
+        const dbCoupon = await coupon_schema.findOne({code: couponCode})
 
-        if(!dbCoupon){
-            throw new customError("Invalid Coupon Code.",400)
+        if(dbCoupon){
+            discountAmount = totalAmount*(dbCoupon.discount/100)
         }
-
-        discountAmount = totalAmount*dbCoupon.discount
     }
-    
     //finalise the price using coupon details if any
     totalAmount = totalAmount - discountAmount
     
@@ -70,7 +64,6 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
         currency: "INR",
         receipt: `receiptID_${new Date().getTime()}`
     }
-
     const order = await razorpay.orders.create(options)
 
     if(!order){
@@ -88,7 +81,7 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
 const generateOrder = asyncHandler(async(req,res)=>{
     const {razorpayOrderId,userid,phoneNumber,products,coupon,amount} = req.body
 
-    const dbUser = user_schema.findById({userid})
+    const dbUser = await user_schema.findById(userid)
 
     if(!dbUser){
         throw new customError("No user found with this details.")
@@ -102,7 +95,7 @@ const generateOrder = asyncHandler(async(req,res)=>{
         throw new customError("Payment is not completed.",400)
     }
 
-    const dbOrder = order_schema.create({
+    const dbOrder = await order_schema.create({
         products,
         user: userid,
         phoneNumber,
@@ -127,7 +120,7 @@ const generateOrder = asyncHandler(async(req,res)=>{
 const getMyOrders = asyncHandler(async(req, res) => {
     const {id:userId} = req.params
 
-    const myOrders = order_schema.findOne({user:userId})
+    const myOrders = await order_schema.findOne({user:userId})
 
     if(!myOrders){
         throw new customError("No Order Found",400)
@@ -142,7 +135,7 @@ const getMyOrders = asyncHandler(async(req, res) => {
 
 //Todo: get all my orders: Admin
 const getAllOrders = asyncHandler(async(req, res) => {
-    const allOrders = order_schema.find()
+    const allOrders = await order_schema.find()
 
     if(!allOrders){
         throw new customError("No Orders Found.",400)
@@ -158,17 +151,24 @@ const getAllOrders = asyncHandler(async(req, res) => {
 
 //Todo: update order Status: Admin
 const updateOrderStatus = asyncHandler(async(req, res) => {
-    const{id: orderId} = req.params
-    const{status} = req.body
 
-    const orderUpdate = order_schema.findByIdAndUpdate(
-        orderId,{
+    //get couponID
+    const  {id: orderId} = req.params
+    const {status} = req.body
+    
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+        throw new customError("Invalid Order ID", 400);
+    }
+
+    //update the coupon
+    const orderUpdate = await order_schema.findByIdAndUpdate(
+        orderId,
+        {
             status
         },{
             new:true,
             runValidators: true
-        }
-    )
+        })
 
     if(!orderUpdate){
         throw new customError("Error while updating status.",400)
