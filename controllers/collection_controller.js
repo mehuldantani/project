@@ -95,11 +95,9 @@ const deleteCollection = asyncHandler(async (req,res)=>{
 
     //validate data
     if(!deleted_collection){
-        throw new customerror('No such record found to delete.',400)
+        throw new customerror('No such collection found to delete.',400)
     }
 
-    //free memory as it is of no use now.
-    deleted_collection.remove()
     //send this response to user
     res.status(200).json({
         success:true,
