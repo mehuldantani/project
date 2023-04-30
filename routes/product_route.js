@@ -8,7 +8,7 @@ const router = Router()
 //add product
 router.post("/",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),addProduct)
 //delete the product
-router.delete("/",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),deleteProduct)
+router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),deleteProduct)
 //check all products
 router.get("/",islogedin,authorize(AuthRoles.ADMIN),getAllProducts)
 //product by id

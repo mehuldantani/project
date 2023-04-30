@@ -18,11 +18,12 @@ const s3fileupload = async({
 //delete a file
 const s3filedelete = async({bucketName,key}) =>{
 
-    return await s3.deleteObject({
+    const deleteParams= {
         Bucket:bucketName,
         Key:key
-    })
-    .promise()
+    }
+    console.log(deleteParams)
+    return await s3.deleteObject(deleteParams).promise()
 
 }
 

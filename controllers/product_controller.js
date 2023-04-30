@@ -158,21 +158,25 @@ const deleteProduct = asyncHandler(async(req,res)=>{
     const product = await product_schema.findById(productID)
 
     if(!product){
-        throw new CustomError("No product found", 404)
+        throw new customerror("No product found", 404)
     }
 
-    const deletephotosfromS3 = promise.all(
+    let deletephotosfromS3 = Promise.all(
         product.photos.map(async(element,index)=>{
             await s3filedelete({
                 bucketName: config.S3_BUCKET_NAME,
-                key:`products/${product._id.tostring()}/photo_${index +1}.png`
+                key:`products/${product._id}/photo_${index +1}.png`
             })
         })
     )
 
     await deletephotosfromS3
 
-    await product.remove()
+    const deleted_product = await product_schema.deleteMany({ _id: productID})
+
+    if(!deleted_product){
+        throw new customerror("Error While deleting product.", 404)
+    }
 
     res.status(200).json({
         success:true,
