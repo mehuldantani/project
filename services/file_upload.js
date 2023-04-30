@@ -1,16 +1,18 @@
-const s3 = require("../utils/aws.js")
+const {s3} = require("../utils/aws.js")
 
 //upload a file
 const s3fileupload = async({
     bucketName,key,body,contentType
 }) =>{
-    return await s3.upload({
+
+    const uploadParams = {
         Bucket: bucketName,
         Key: key,
         Body: body,
         ContentType: contentType
-    })
-    .promise()
+    }
+    console.log(uploadParams)
+    return await s3.upload(uploadParams).promise()
 }
 
 //delete a file
