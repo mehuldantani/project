@@ -82,7 +82,7 @@ const updateCoupon = asyncHandler(async(req,res)=>{
     const {code,discount} = req.body
     
     //update the coupon
-    const coupon = coupon_schema.findByIdAndUpdate(
+    const coupon = await coupon_schema.findByIdAndUpdate(
         couponId,
         {
             code,
@@ -117,9 +117,7 @@ const deleteCoupon = asyncHandler(async(req,res)=>{
     const  {id: couponId} = req.params
     
     //delete the coupon
-    const coupon = coupon_schema.findByIdAndDelete({
-        couponId
-    })
+    const coupon = await coupon_schema.findByIdAndDelete(couponId)
 
     if(!coupon){
         throw new customError("Error while deleting the coupon.",400)
@@ -142,7 +140,7 @@ const deleteCoupon = asyncHandler(async(req,res)=>{
  *********************************************************/
 
 const getAllCoupons = asyncHandler(async(req,res)=>{
-    const coupons = coupon_schema.find({})
+    const coupons = await coupon_schema.find()
 
     if(!coupons){
         throw new customError("No Coupons Found.",400)
