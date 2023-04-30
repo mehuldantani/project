@@ -158,31 +158,29 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     await existingUser.save({validateBeforeSave: false})
 
     //generate reset password url
-    const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/password/forgot/${resetToken}`
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/password/reset/${resetToken}`
 
-    //email content
-    const text = `Your Password reset url is 
-    \n\n ${resetUrl}\n\n`
     //send and email
     try {
         await emailsend({
             email: existingUser.email,
-            subject: "Reset password - Mehul",
-            text:text
+            subject: `Reset password -${existingUser.name}` ,
+            text:resetUrl,
+            name: existingUser.name
         })
 
         //send response
         res.status(200).json({
             success: true,
-            message: `We have sent an email to ${user.email} with Reset password link.`
+            message: `We have sent an email to ${existingUser.email} with Reset password link.`
         })
     } catch (err) {
 
         //Rollback the chanes on email failure
         existingUser.forgotpasswordExpiry = undefined
         existingUser.forgotpasswordToken = undefined
-        
-        throw new customerror('Failed',400)
+        console.log(err)
+        throw new customerror('Error in Email Send',400)
     }
 })
 
@@ -212,7 +210,7 @@ const resetPassword = asyncHandler(async(req,res)=>{
     .digest('hex')
 
     //find user with same token and valid expiry time
-    const userFound = user.findOne({
+    const userFound = await User.findOne({
         forgotpasswordToken: resetPasswordToken,
         forgotpasswordExpiry: {$gt: Date.now()}
     })
@@ -228,11 +226,11 @@ const resetPassword = asyncHandler(async(req,res)=>{
     userFound.forgotpasswordExpiry = undefined
 
     //save to DB
-    await user.save()
+    await userFound.save()
 
     //set token
-    const token = user.getJwtToken()
-    user.password = undefined
+    const token = userFound.getJwtToken()
+    userFound.password = undefined
 
     res.cookie("token",token,cookieOptions)
     res.status(200).json({
