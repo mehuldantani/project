@@ -119,12 +119,17 @@ const getProductById = asyncHandler(async(req,res)=>{
     //get and ID
     const {id:productid} = req.params
 
-    //find product by ID
-    const products = await product_schema.findById({productid})
-
-    if(!products){
-        throw new customerror("No Products Found",400)
+    
+    if (!mongoose.Types.ObjectId.isValid(productid)) {
+        throw new customerror("Invalid Product ID", 400);
     }
+      
+    const products = await product_schema.find({_id: productid});
+     
+    if (!products || products.length === 0) {
+        throw new customerror("No Products Found", 404);
+    }
+
     //send respoinse
     res.status(200).json({
         success:true,
@@ -138,11 +143,14 @@ const getProductbyCollectionId = asyncHandler(async(req,res)=>{
     //get collection ID
     const {id: collectionId} = req.params
 
-    //find all products with collection ID
-    const products = product_schema.find({collectionId})
-
-    if(!products){
-        throw new customerror("No Products found this category.")
+    if (!mongoose.Types.ObjectId.isValid(collectionId)) {
+        throw new customerror("Invalid Collection ID", 400);
+    }
+      
+    const products = await product_schema.find({collectionId: collectionId});
+     
+    if (!products || products.length === 0) {
+        throw new customerror("No Products found under this category.")
     }
 
     res.status(200).json({
