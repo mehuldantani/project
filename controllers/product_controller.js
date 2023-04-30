@@ -28,15 +28,12 @@ const addProduct = asyncHandler(async (req,res)=>{
                 if(err){
                     throw new customerror(err.message,500)
                 }
-                
                 //generate product id
                 let productId = new mongoose.Types.ObjectId().toHexString()
 
-                //console.log(fields,files)
-
                 //check for fields
                 if(!fields.name || !fields.price || !fields.description || !fields.collectionId ){
-                    throw new customerror("Please fill all the details",500)
+                    throw new customerror("Product Name,Price,Description and Collection ID required to add a new product.",500)
                 }
                 
                 //handling images on cloud
@@ -46,9 +43,7 @@ const addProduct = asyncHandler(async (req,res)=>{
                     Object.keys(files).map(async (filekey,index)=>{
                         //get individual file key
                         const element = files[filekey]
-
                         const path = fs.readFileSync(element.filepath)
-
                         const upload = await s3fileupload({
                             bucketName: config.S3_BUCKET_NAME,
                             key: `products/${productId}/photo_${index+1}.png`,
@@ -73,7 +68,7 @@ const addProduct = asyncHandler(async (req,res)=>{
                 if(!product){
                     throw new customerror("Product was not added",400)
 
-                    //remove images if product failed from MONGODB side
+                    //remove images from AWS if product failed from MONGODB side
                 }
 
                 res.status(200).json({
