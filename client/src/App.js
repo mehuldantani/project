@@ -3,12 +3,15 @@ import Homepage from './pages/HomePage.js'
 import Contact from './pages/contact.js'
 import About from './pages/About.js'
 import PageNotFound from './pages/pagenotfound.js'
+import Login from './pages/Auth/login.js'
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element = {<Homepage/>} />
+        <Route path='/' element = {<Login/>} />
         <Route path='/contact' element = {<Contact/>} />
         <Route path='/about' element = {<About/>} />
         <Route path='/*' element = {<PageNotFound/>} />

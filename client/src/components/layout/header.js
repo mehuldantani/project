@@ -1,13 +1,16 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
+import {NavLink,Link} from 'react-router-dom'
+import {HiShoppingCart} from 'react-icons/hi'
 
 const header = () => {
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-  <NavLink to='/' className="navbar-brand">
-    CloudCart
-  </NavLink>
+    <div className="brand">
+    <Link to='/' className="navbar-brand">
+    <HiShoppingCart style={{ fontSize: '40px' }} /> CloudCart
+    </Link>
+    </div>
   <button
     className="navbar-toggler"
     type="button"
@@ -20,14 +23,9 @@ const header = () => {
     <span className="navbar-toggler-icon" />
   </button>
   <div className="collapse navbar-collapse" id="navbarText">
-    <ul className="navbar-nav mr-auto">
-      <li className="nav-item active">
-        <NavLink to='/' className="nav-link">
-          Home <span className="sr-only"></span>
-        </NavLink>
-      </li>
+    <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <NavLink to='/' className="nav-link">
+        <NavLink to='/asd' className="nav-link">
           Categories
         </NavLink>
       </li>
@@ -37,14 +35,13 @@ const header = () => {
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink to='/' className="nav-link">
-          Orders
+        <NavLink to='/as' className="nav-link">
+          Cart(0)
         </NavLink>
       </li>
     </ul>
   </div>
-</nav>
-
+    </nav>
     </>
   )
 }
