@@ -1,13 +1,14 @@
 import {React,useState} from 'react';
 import Layout from '../../components/layout/layout.js';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import axios from 'axios'
+
 const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
 
   //handle submit
   const HandleSubmit = async (e)=>{
@@ -18,7 +19,15 @@ const Login = () => {
         "password": password
       }
       );
-      console.log(resp)
+      if (resp.status === 200 && resp.data.success) {
+        // show success message to the user
+        navigate('/contact')
+        toast.success("Login successful");
+        
+      } else {
+        // show error message to the user
+        toast.error("Invalid email or password");
+      }
     } catch(error){
       console.log(error)
       toast.error("Something Went Wrong.")
@@ -58,7 +67,7 @@ const Login = () => {
       </form>
       <div class="mt-3 text-center">
       <Link to='/register' className="singup">
-        Don't have an account yet ? Sign up now
+        Sign up now
         </Link>
       </div>
     </div>

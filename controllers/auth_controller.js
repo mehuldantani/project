@@ -69,7 +69,7 @@ const login = asyncHandler(async (req,resp) =>{
 
     //validation
     if (!(email || password)){
-        throw new customerror('Email and password is required for Login.',400)
+        throw new customerror('Email and password is required for Login.',200)
     }
 
     //check with user and password
@@ -77,14 +77,14 @@ const login = asyncHandler(async (req,resp) =>{
     const userExists = await User.findOne({email}).select("+password")
 
     if(!userExists){
-        throw new customerror('Invalid Credentials.',400)
+        throw new customerror('Invalid Credentials.',200)
     }
 
     //match the password
     const isPWmatched =  await userExists.comparePasssword(password)
 
     if (!isPWmatched){
-        throw new customerror('Invalid Credentials.',400)
+        throw new customerror('Invalid Credentials.',200)
     }
 
     //get token
