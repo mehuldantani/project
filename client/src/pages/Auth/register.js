@@ -40,9 +40,10 @@ const Register = () => {
   
     return (
       <Layout>
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-      <div class="max-width-150 rounded p-4 login-container">
-        <form onSubmit={HandleSubmit}>
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="max-width-250 rounded p-5 login-container">
+      <h2 class="text-center mb-4">Sign Up</h2>
+      <form onSubmit={HandleSubmit}>
         <div class="mb-3">
           <label for="exampleInputName" class="form-label">Name</label>
           <input 
@@ -53,42 +54,40 @@ const Register = () => {
             onChange={(e)=>{setName(e.target.value)}}
             required
           />
-          <div id="emailHelp" class="form-text">____________________________________________________________</div>
         </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input 
-              type="email" 
-              class="form-control" 
-              id="exampleInputEmail1" 
-              aria-describedby="emailHelp"
-              value={email}
-              onChange={(e)=>{setEmail(e.target.value)}}
-              required
-            />
-            <div id="emailHelp" class="form-text">____________________________________________________________</div>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input 
-              type="password" 
-              class="form-control" 
-              id="exampleInputPassword1"
-              value={password}
-              onChange={(e)=>{setPassword(e.target.value)}}
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <div class="mt-3 text-center">
-        <Link to='/' className="singup">
-          Sign In
-          </Link>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="exampleInputEmail1" 
+            aria-describedby="emailHelp"
+            value={email}
+            onChange={(e)=>{setEmail(e.target.value)}}
+            required
+          />
         </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="exampleInputPassword1"
+            value={password}
+            onChange={(e)=>{setPassword(e.target.value)}}
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+      </form>
+      <div class="mt-3 text-center">
+      <Link to='/login' className="signin">
+        Sign In
+        </Link>
       </div>
     </div>
-  </Layout>
+  </div>
+</Layout>
   
     )
   }

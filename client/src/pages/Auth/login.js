@@ -10,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
   //handle submit
   const HandleSubmit = async (e)=>{
     e.preventDefault()
@@ -21,9 +22,8 @@ const Login = () => {
       );
       if (resp.status === 200 && resp.data.success) {
         // show success message to the user
-        navigate('/contact')
         toast.success("Login successful");
-        
+        navigate('/contact')
       } else {
         // show error message to the user
         toast.error("Invalid email or password");
@@ -36,43 +36,43 @@ const Login = () => {
 
   return (
     <Layout>
-  <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="max-width-150 rounded p-4 login-container">
-      <form onSubmit={HandleSubmit}>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input 
-            type="email" 
-            class="form-control" 
-            id="exampleInputEmail1" 
-            aria-describedby="emailHelp"
-            value={email}
-            onChange={(e)=>{setEmail(e.target.value)}}
-            required
-          />
-          <div id="emailHelp" class="form-text">____________________________________________________________</div>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+      <div class="max-width-250 rounded p-5 login-container">
+        <h2 class="text-center mb-4">Sign In</h2>
+        <form onSubmit={HandleSubmit}>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="exampleInputEmail1" 
+              aria-describedby="emailHelp"
+              value={email}
+              onChange={(e)=>{setEmail(e.target.value)}}
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="exampleInputPassword1"
+              value={password}
+              onChange={(e)=>{setPassword(e.target.value)}}
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+        <div class="mt-3 text-center">
+        <Link to='/register' className="singup">
+          Sign up now
+          </Link>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input 
-            type="password" 
-            class="form-control" 
-            id="exampleInputPassword1"
-            value={password}
-            onChange={(e)=>{setPassword(e.target.value)}}
-            required
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-      <div class="mt-3 text-center">
-      <Link to='/register' className="singup">
-        Sign up now
-        </Link>
       </div>
     </div>
-  </div>
-</Layout>
+  </Layout>
 
   )
 }
