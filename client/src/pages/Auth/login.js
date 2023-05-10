@@ -3,11 +3,13 @@ import Layout from '../../components/layout/layout.js';
 import {Link, useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import axios from 'axios'
+import { useAuth } from '../../context/auth.js';
 
 const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [auth,setAuth] = useAuth();
   const navigate = useNavigate();
 
 
@@ -21,9 +23,12 @@ const Login = () => {
       }
       );
       if (resp.status === 200 && resp.data.success) {
+        setAuth({
+          ...resp.data.userExists
+        })
         // show success message to the user
         toast.success("Login successful");
-        navigate('/contact')
+        navigate('/')
       } else {
         // show error message to the user
         toast.error("Invalid email or password");
