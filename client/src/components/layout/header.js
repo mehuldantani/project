@@ -1,8 +1,41 @@
 import React from 'react'
-import {NavLink,Link} from 'react-router-dom'
+import {NavLink,Link,useNavigate} from 'react-router-dom'
 import {HiShoppingCart} from 'react-icons/hi'
+import { useAuth } from '../../context/auth'
+import axios from 'axios'
+import {toast} from 'react-toastify'
 
-const header = () => {
+const Header = () => {
+
+  const [auth,setAuth] = useAuth();
+  const navigate = useNavigate()
+  const HandleLougout = async (e)=>{
+    e.preventDefault()
+      try{
+        const resp = await axios.post("api/v1/auth/logout",null);
+        if (resp.status === 200 && resp.data.success) {
+          // show success message to the user
+          //navigate('/contact')
+          toast.success("Logged Out");
+        } else {
+          // show error message to the user
+          toast.error("Something Went Wrong.");
+        }
+      } catch(error){
+        console.log(error)
+        toast.error("Something Went Wrong.")
+      }
+
+    setAuth({
+      ...auth,
+      user:null,
+      token:null
+    })
+
+    localStorage.removeItem('auth')
+    navigate('/login')
+  }
+
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,6 +72,21 @@ const header = () => {
           Cart(0)
         </NavLink>
       </li>
+      {
+        auth.user ?  (<>
+        <li className="nav-item">
+        <NavLink to='/login' onClick={HandleLougout} className="nav-link">
+          Signout
+        </NavLink>
+      </li>
+      </>) : (<>
+        <li className="nav-item">
+        <NavLink to='/login' className="nav-link">
+          Login
+        </NavLink>
+      </li>
+      </>)
+      }
     </ul>
   </div>
     </nav>
@@ -46,4 +94,4 @@ const header = () => {
   )
 }
 
-export default header
+export default Header

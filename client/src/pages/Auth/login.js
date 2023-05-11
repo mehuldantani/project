@@ -1,6 +1,6 @@
 import {React,useState} from 'react';
 import Layout from '../../components/layout/layout.js';
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate,useLocation} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import { useAuth } from '../../context/auth.js';
@@ -11,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [auth,setAuth] = useAuth();
   const navigate = useNavigate();
-
+  const location = useLocation();
 
   //handle submit
   const HandleSubmit = async (e)=>{
@@ -24,11 +24,15 @@ const Login = () => {
       );
       if (resp.status === 200 && resp.data.success) {
         setAuth({
-          ...resp.data.userExists
+          ...auth,
+          user: resp.data.userExists.name,
+          token: resp.data.token
         })
+        //set data in local storage
+        localStorage.setItem('auth',JSON.stringify(resp.data))
         // show success message to the user
         toast.success("Login successful");
-        navigate('/')
+        navigate(location.state || '/')
       } else {
         // show error message to the user
         toast.error("Invalid email or password");

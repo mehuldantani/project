@@ -15,4 +15,9 @@ router.post("/password/reset/:token",resetPassword)
 router.get("/logout",logout)
 router.get("/profile",islogedin, getProfile)
 
+//protected route
+router.get("/user-auth",islogedin,(req,res)=>{
+    res.status(200).send({ok:true});
+})
+
 module.exports = router
