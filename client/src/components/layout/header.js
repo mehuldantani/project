@@ -50,7 +50,7 @@ const Header = () => {
     data-toggle="collapse"
     data-target="#navbarText"
     aria-controls="navbarText"
-    aria-expanded="false"
+    aria-expanded="true"
     aria-label="Toggle navigation"
   >
     <span className="navbar-toggler-icon" />
@@ -76,9 +76,9 @@ const Header = () => {
         auth.user ?  (<>
         <li className="nav-item">
         <NavLink to='/login' onClick={HandleLougout} className="nav-link">
-          Signout
+          Logout
         </NavLink>
-      </li>
+        </li>
       </>) : (<>
         <li className="nav-item">
         <NavLink to='/login' className="nav-link">

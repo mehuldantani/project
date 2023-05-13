@@ -3,7 +3,7 @@ import { useNavigate,useLocation } from 'react-router-dom';
 
 const Spinner = () => {
 
-  const [count,setCount] = useState(3)
+  const [count,setCount] = useState(1)
   const navigate = useNavigate()
   const location = useLocation()
 

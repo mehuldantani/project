@@ -203,6 +203,11 @@ const resetPassword = asyncHandler(async(req,res)=>{
     if (password !== confirmPassword) {
         throw new customerror('Passwords are not matching',400)
     }
+    
+    if (password.length < 8) {
+        throw new customerror('Password should be at least 8 characters long', 400);
+    }
+
 
     const resetPasswordToken =  crypto
     .createHash('sha256')

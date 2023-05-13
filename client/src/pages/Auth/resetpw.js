@@ -11,31 +11,36 @@ const Resetpassword = () => {
     
     const { token } = useParams();
     const navigate = useNavigate();
-
-    console.log(password,confirmpassword,token)
     //handle submit
     const HandleSubmit = async (e)=>{
       e.preventDefault()
+      
       const url = `api/v1/auth/password/reset/${token}`;
-      try{
-        const resp = await axios.post(url,{
-            "password": password,
-            "confirmPassword": confirmpassword
-        }        
-        );
+      try {
+        const resp = await axios.post(`http://localhost:4000/${url}`, {
+          "password": password,
+          "confirmPassword": confirmpassword
+        });
+      
         if (resp.status === 200 && resp.data.success) {
           // show success message to the user
           navigate('/login')
           toast.success("Password Reset Successfully");
-          
         } else {
           // show error message to the user
+          toast.error(resp.data.message);
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          // handle error response with status code 400
+          toast.error(error.response.data.message);
+        } else {
+          // handle other errors
+          console.log(error);
           toast.error("Something Went Wrong.");
         }
-      } catch(error){
-        console.log(error)
-        toast.error("Something Went Wrong.")
       }
+        
     }
   
     return (

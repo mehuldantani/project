@@ -50,11 +50,11 @@ const Login = () => {
         <h2 class="text-center mb-4">Sign In</h2>
         <form onSubmit={HandleSubmit}>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <label for="exampleloginEmail1" class="form-label">Email address</label>
             <input 
               type="email" 
               class="form-control" 
-              id="exampleInputEmail1" 
+              id="exampleloginEmail1" 
               aria-describedby="emailHelp"
               autoComplete="new-password"
               value={email}
