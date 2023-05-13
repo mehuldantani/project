@@ -3,7 +3,7 @@ import {NavLink,Link,useNavigate} from 'react-router-dom'
 import {HiShoppingCart} from 'react-icons/hi'
 import { useAuth } from '../../context/auth'
 import axios from 'axios'
-import {toast} from 'react-toastify'
+import toast from 'react-hot-toast';
 
 const Header = () => {
 

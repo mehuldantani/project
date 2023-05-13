@@ -1,14 +1,22 @@
 import React from 'react'
-import Header from './header.js'
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Header from './header.js';
+import { Toaster } from 'react-hot-toast';
 
 const layout = ({children}) => {
   return (
     <div>
       <Header/>
       <main style={{minHeight:'80vh'}}>
-        <ToastContainer/>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#333',
+            color: '#fff',
+          },
+        }}
+      />
       {children}
       </main>
       </div>

@@ -29,7 +29,7 @@ const Spinner = () => {
   <div className="spinner-grow mx-2" role="status"></div>
   <div className="spinner-grow mx-2" role="status"></div>
   </div>
-  <span className="sr-only fs-3">Redirecting to Login in {count} Seconds.</span>
+  <span className="sr-only fs-3">Authenticating . . .</span>
 </div>
 
     </>

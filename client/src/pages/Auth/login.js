@@ -1,7 +1,7 @@
 import {React,useState} from 'react';
 import Layout from '../../components/layout/layout.js';
 import {Link, useNavigate,useLocation} from 'react-router-dom'
-import {toast} from 'react-toastify'
+import toast from 'react-hot-toast';
 import axios from 'axios'
 import { useAuth } from '../../context/auth.js';
 
@@ -56,6 +56,7 @@ const Login = () => {
               class="form-control" 
               id="exampleInputEmail1" 
               aria-describedby="emailHelp"
+              autoComplete="new-password"
               value={email}
               onChange={(e)=>{setEmail(e.target.value)}}
               required
@@ -77,6 +78,11 @@ const Login = () => {
         <div class="mt-3 text-center">
         <Link to='/register' className="singup">
           Sign up now
+          </Link>
+        </div>
+        <div class="mt-3 text-center">
+        <Link to='/forgotpassword' className="singup">
+          Forgot Password?
           </Link>
         </div>
       </div>

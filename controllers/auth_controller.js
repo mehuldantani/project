@@ -158,7 +158,7 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     await existingUser.save({validateBeforeSave: false})
 
     //generate reset password url
-    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/password/reset/${resetToken}`
+    const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`
 
     //send and email
     try {
