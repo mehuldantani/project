@@ -12,7 +12,8 @@ const Header = () => {
   const HandleLougout = async (e)=>{
     e.preventDefault()
       try{
-        const resp = await axios.post("api/v1/auth/logout",null);
+        const resp = await axios.get("api/v1/auth/logout",null);
+        console.log(resp)
         if (resp.status === 200 && resp.data.success) {
           // show success message to the user
           //navigate('/contact')
@@ -69,44 +70,48 @@ const Header = () => {
         </NavLink>
       </li>
       {auth.user ? (
-        <>
-          <li className="nav-item dropdown">
-            <NavLink
-              className="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {auth.user}
-            </NavLink>
-            <ul className="dropdown-menu">
-              <li>
-                <NavLink to={`/dashboard/${
-                  auth?.role ==='ADMIN'? "admin":"user"
-                  }`} className="dropdown-item">Dashboard</NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/login"
-                  onClick={HandleLougout}
-                  className="dropdown-item"
-                >
-                  Logout
-                </NavLink>
-              </li>
-            </ul>
-          </li>
-        </>
-      ) : (
-        <>
-          <li className="nav-item">
-            <NavLink to="/login" className="nav-link">
-              Login
-            </NavLink>
-          </li>
-        </>
-      )}
+  <>
+    <li className="nav-item dropdown">
+      <NavLink
+        className="nav-link dropdown-toggle"
+        href="#"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {auth.user}
+      </NavLink>
+      <ul className="dropdown-menu">
+        <li>
+          <NavLink
+            to={`/dashboard/${auth?.role === 'ADMIN' ? "admin" : "user"}`}
+            className="dropdown-item"
+          >
+            Dashboard
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/login"
+            onClick={HandleLougout}
+            className="dropdown-item"
+          >
+            Logout
+          </NavLink>
+        </li>
+      </ul>
+    </li>
+  </>
+) : (
+  <>
+    <li className="nav-item">
+      <NavLink to="/login" className="nav-link">
+        Login
+      </NavLink>
+    </li>
+  </>
+)}
+
       <li className="nav-item">
         <NavLink to="/as" className="nav-link">
           Cart(0)
