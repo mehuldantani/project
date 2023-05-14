@@ -114,11 +114,10 @@ const login = asyncHandler(async (req,resp) =>{
 const logout = asyncHandler(async (_req,res) =>{
     //reset token
     //    res.clearCookie() -> this can also be used
-    res.cookie("token",null,
-    {
-        expires: new Date(Date.now()),
-        httponly: true
-    })
+    res.cookie("token", null, {
+        expires: new Date(0),
+        httpOnly: true
+      });      
 
     //send response
     res.status(200).json({
