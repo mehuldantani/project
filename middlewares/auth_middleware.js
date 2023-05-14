@@ -9,7 +9,8 @@ const islogedin = asyncHandler(async(req,_res,next)=>{
 
     if (
         req.cookies.token || 
-        (req.headers.authorization && req.headers.authorization.startswith('Bearer'))) {
+        (req.headers.authorization && req.headers.authorization.startsWith('Bearer')))
+    {
 
         token = req.cookies.token || req.headers.authorization.split(" ")[1]
     }

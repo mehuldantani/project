@@ -8,13 +8,8 @@ const layout = ({children}) => {
       <Header/>
       <main style={{minHeight:'80vh'}}>
       <Toaster
-        position="top-right"
         toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#333',
-            color: '#fff',
-          },
+          duration: 3000
         }}
       />
       {children}

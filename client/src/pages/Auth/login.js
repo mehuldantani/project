@@ -25,6 +25,7 @@ const Login = () => {
       if (resp.status === 200 && resp.data.success) {
         setAuth({
           ...auth,
+          role:resp.data.userExists.role || 'user',
           user: resp.data.userExists.name,
           token: resp.data.token
         })

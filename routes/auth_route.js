@@ -1,6 +1,7 @@
 const Router = require("express")
 const {forgotPassword,getProfile,login,logout,resetPassword,signUp} = require("../controllers/auth_controller")
-const {islogedin} = require("../middlewares/auth_middleware")
+const {islogedin,authorize} = require("../middlewares/auth_middleware")
+const {AuthRoles} = require("../utils/authroles")
 
 //create router instance
 const router = Router()
@@ -17,6 +18,11 @@ router.get("/profile",islogedin, getProfile)
 
 //protected route
 router.get("/user-auth",islogedin,(req,res)=>{
+    res.status(200).send({ok:true});
+})
+
+//protected route
+router.get("/admin-auth",islogedin,(req,res)=>{
     res.status(200).send({ok:true});
 })
 

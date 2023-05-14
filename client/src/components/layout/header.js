@@ -29,7 +29,8 @@ const Header = () => {
     setAuth({
       ...auth,
       user:null,
-      token:null
+      token:null,
+      role: null
     })
 
     localStorage.removeItem('auth')
@@ -39,11 +40,11 @@ const Header = () => {
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-    <div className="brand">
-    <Link to='/' className="navbar-brand">
-    <HiShoppingCart style={{ fontSize: '40px' }} /> CloudCart
+  <div className="brand">
+    <Link to="/" className="navbar-brand">
+      <HiShoppingCart style={{ fontSize: "40px" }} /> CloudCart
     </Link>
-    </div>
+  </div>
   <button
     className="navbar-toggler"
     type="button"
@@ -58,38 +59,63 @@ const Header = () => {
   <div className="collapse navbar-collapse" id="navbarText">
     <ul className="navbar-nav ms-auto">
       <li className="nav-item">
-        <NavLink to='/asd' className="nav-link">
+        <NavLink to="/asd" className="nav-link">
           Categories
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink to='/contact' className="nav-link">
+        <NavLink to="/contact" className="nav-link">
           Coupons
         </NavLink>
       </li>
+      {auth.user ? (
+        <>
+          <li className="nav-item dropdown">
+            <NavLink
+              className="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {auth.user}
+            </NavLink>
+            <ul className="dropdown-menu">
+              <li>
+                <NavLink to={`/dashboard/${
+                  auth?.role ==='ADMIN'? "admin":"user"
+                  }`} className="dropdown-item">Dashboard</NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/login"
+                  onClick={HandleLougout}
+                  className="dropdown-item"
+                >
+                  Logout
+                </NavLink>
+              </li>
+            </ul>
+          </li>
+        </>
+      ) : (
+        <>
+          <li className="nav-item">
+            <NavLink to="/login" className="nav-link">
+              Login
+            </NavLink>
+          </li>
+        </>
+      )}
       <li className="nav-item">
-        <NavLink to='/as' className="nav-link">
+        <NavLink to="/as" className="nav-link">
           Cart(0)
         </NavLink>
       </li>
-      {
-        auth.user ?  (<>
-        <li className="nav-item">
-        <NavLink to='/login' onClick={HandleLougout} className="nav-link">
-          Logout
-        </NavLink>
-        </li>
-      </>) : (<>
-        <li className="nav-item">
-        <NavLink to='/login' className="nav-link">
-          Login
-        </NavLink>
-      </li>
-      </>)
-      }
     </ul>
   </div>
-    </nav>
+</nav>;
+
     </>
   )
 }
