@@ -22,9 +22,10 @@ const Forgotpassword = () => {
         }
         );
         if (resp.status === 200 && resp.data.success) {
+          
+          toast.success(`We have sent an email to ${email} address.`);
           // show success message to the user
           navigate('/login')
-          toast.success("We have sent an email to email address.");
           
         } else {
           // show error message to the user

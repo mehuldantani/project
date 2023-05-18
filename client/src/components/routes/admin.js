@@ -6,14 +6,13 @@ import Spinner from '../spinner.js'
 import toast from 'react-hot-toast'
 
 export default function AdminRoute(){
-
     const [ok,setOk] = useState(false)
     const [auth,setAuth] = useAuth()
 
     useEffect(()=>{
         const authcheck = async()=>{
             try {
-                const res = await axios.get("http://localhost:4000/api/v1/auth/admin-auth")
+                const res = await axios.post("http://localhost:4000/api/v1/auth/admin-auth")
 
                 if(res.data.ok){
                     setOk(true)
@@ -32,5 +31,5 @@ export default function AdminRoute(){
 
     },[auth?.token])
 
-    return ok ? <Outlet/>:<Spinner/>
+    return ok ? <Outlet/>:<Spinner path=""/>
 };

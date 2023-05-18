@@ -22,7 +22,7 @@ router.get("/user-auth",islogedin,(req,res)=>{
 })
 
 //protected route
-router.get("/admin-auth",islogedin,authorize(AuthRoles.ADMIN),(req,res)=>{
+router.post("/admin-auth",islogedin,authorize(AuthRoles.ADMIN),(req,res)=>{
     res.status(200).send({ok:true});
 })
 

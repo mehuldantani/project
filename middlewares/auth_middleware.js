@@ -6,7 +6,8 @@ const JWT = require("jsonwebtoken")
 
 const islogedin = asyncHandler(async(req,_res,next)=>{
     let token;
-
+    console.log(req.cookies)
+    console.log(req.headers.authorization)
     if (
         req.cookies.token || 
         (req.headers.authorization && req.headers.authorization.startsWith('Bearer')))
