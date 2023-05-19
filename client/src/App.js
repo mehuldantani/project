@@ -4,6 +4,9 @@ import Contact from './pages/contact.js'
 import About from './pages/About.js'
 import PageNotFound from './pages/pagenotfound.js'
 import Admindashboard from './pages/Admin/admindashboard.js'
+import Createproduct from './pages/Admin/createproduct.js'
+import Createcategory from './pages/Admin/createcategory.js'
+import Createcoupon from './pages/Admin/createcoupon.js'
 import Register from './pages/Auth/register.js'
 import Login from './pages/Auth/login.js'
 import Dashboard from './pages/user/dashboard.js'
@@ -11,6 +14,9 @@ import PrivateRoute from './components/routes/private.js'
 import Forgotpassword from './pages/Auth/forgotpw.js'
 import Resetpassword from './pages/Auth/resetpw.js'
 import AdminRoute from './components/routes/admin.js'
+import Users from './pages/Admin/user.js'
+import Myorders from './pages/user/myorders.js'
+import Myprofile from './pages/user/myprofile.js'
 
 function App() {
   return (
@@ -21,9 +27,15 @@ function App() {
         </Route>
         <Route path="/dashboard" element={<PrivateRoute/>}>
           <Route path='user' element = {<Dashboard/>} />
+          <Route path='user/profile' element = {<Myprofile/>} />
+          <Route path='user/orders' element = {<Myorders/>} />
         </Route>
         <Route path="/dashboard" element={<AdminRoute/>}>
           <Route path='admin' element = {<Admindashboard/>} />
+          <Route path='admin/add-product' element = {<Createproduct/>} />
+          <Route path='admin/add-category' element = {<Createcategory/>} />
+          <Route path='admin/add-coupon' element = {<Createcoupon/>} />
+          <Route path='admin/users' element = {<Users/>} />
         </Route>
         <Route path='/login' element = {<Login/>} />
         <Route path='/register' element = {<Register/>} />
