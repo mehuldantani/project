@@ -45,7 +45,7 @@ const Createcoupon = () => {
               <table className='table table-striped table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>Name</th>
+                    <th scope='col-4'>Name</th>
                     <th scope='col'>Discount</th>
                   </tr>
                 </thead>
@@ -53,7 +53,7 @@ const Createcoupon = () => {
                   {coupons.map((c) => (
                     <tr key={c._id}>
                       <td>{c.code}</td> {/* Access the name property of each category */}
-                      <td>{c.discount}</td>
+                      <td>{c.discount} %</td>
                     </tr>
                   ))}
                 </tbody>

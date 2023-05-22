@@ -3,6 +3,8 @@ import Layout from '../../components/layout/layout';
 import Adminmenu from '../../components/layout/adminmenu.js';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare ,faTrashCan} from '@fortawesome/free-solid-svg-icons';
 
 const Createcategory = () => {
   const [categories, setCategories] = useState([]);
@@ -42,6 +44,9 @@ const Createcategory = () => {
           </div>
           <div className='col-md-9'>
             <h3>Manage Categories</h3>
+            <div className='d-flex justify-content-end mb-2'>
+    <button className='btn btn-primary' style={{ marginRight: '30px' }}>New Category</button>
+  </div>
             <div>
               <table className='table table-striped table-hover'>
                 <thead>
@@ -51,10 +56,12 @@ const Createcategory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((c) => (
+                  {categories?.map((c) => (
                     <tr key={c._id}>
                       <td>{c.name}</td> {/* Access the name property of each category */}
                       <td>Actions</td>
+                      <td><FontAwesomeIcon icon={faPenToSquare} /></td>
+                      <td><FontAwesomeIcon icon={faTrashCan} /></td>
                     </tr>
                   ))}
                 </tbody>
