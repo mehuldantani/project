@@ -20,8 +20,9 @@ const Couponform = ({HandleSubmit,value,setValue,discount,setDiscount}) => {
             placeholder="Discount percentage"
             value={discount}
             onChange={(e) =>{
-              setDiscount(e.target.discount)
-            }}
+              setDiscount(Math.max(0, Math.min(e.target.value, 100)));
+              }}
+
             />
         </div>
         <button type="submit" className="btn btn-primary mt-3">
