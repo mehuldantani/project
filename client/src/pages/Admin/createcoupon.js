@@ -13,7 +13,7 @@ const Createcoupon = () => {
   const [coupons, setCoupons] = useState([]);
   const [code,setCode] = useState("")
   const [updatedcode,setUpdatedcode] = useState("")
-  const [discount, setDiscount] = useState(0)
+  const [discount, setDiscount] = useState(null)
   const [updateddiscount,setUpdateddiscount] = useState(0)
   const [selected,setSelected] = useState(null)
   const [visible,setVisible] = useState(false)
@@ -26,22 +26,28 @@ const Createcoupon = () => {
       const resp = await axios.post("http://localhost:4000/api/v1/coupon",{
         "code":code,
         "discount":discount
-    }
-      );
-      console.log(code,discount)
+      });
+      console.log(resp)
 
       if (resp.status === 200 && resp.data.success) {
         
         toast.success(`${code} Added.`);
-        setCode("")  
+        setCode("")
+        setDiscount(null)
         getAllCoupons() 
       } else {
         // show error message to the user
-        toast.error("Something Went Wrong.");
+        toast.error(resp.data.message);
       }
     } catch(error){
-      console.log(error)
-      toast.error("Something Went Wrong.")
+      if (error.response) {
+        // handle error response with status code 400
+        toast.error(error.response.data.message);
+      } else {
+        // handle other errors
+        console.log(error);
+        toast.error("Something Went Wrong.");
+      }
     }
 
   }
@@ -51,16 +57,18 @@ const Createcoupon = () => {
     e.preventDefault()
 
     try{
-      const resp = await axios.post(`http://localhost:4000/api/v1/coupon/${selected._id}`,{
+      const resp = await axios.put(`http://localhost:4000/api/v1/coupon/${selected._id}`,{
         "code":updatedcode,
         "discount":updateddiscount
-    }
-      );
+    });
+
+    console.log(resp)
+
       if (resp.status === 200 && resp.data.success) {
         
         toast.success(`Updated ${updatedcode}.`);
         setCode("")  
-        setDiscount(0)
+        setDiscount(null)
         setUpdateddiscount(0)
         setUpdatedcode("")
         getAllCoupons() 
@@ -86,7 +94,7 @@ const Createcoupon = () => {
         toast.success(`${code} Deleted`);
         setCode("")
         setUpdatedcode("")
-        setDiscount(0)
+        setDiscount(null)
         setUpdateddiscount(0)  
         getAllCoupons()
       } else {

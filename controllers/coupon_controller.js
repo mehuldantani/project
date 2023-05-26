@@ -18,7 +18,7 @@ const createCoupon = asyncHandler(async(req,resp)=>{
         throw new customError("Please provide all the required fields.",400)
     }
 
-    const coupon = coupon_schema.create({
+    const coupon = await coupon_schema.create({
         code: code,
         discount: discount
     })
