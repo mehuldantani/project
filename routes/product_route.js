@@ -11,9 +11,9 @@ router.post("/",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),addProd
 router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),deleteProduct)
 //check all products
 router.get("/",islogedin,authorize(AuthRoles.ADMIN),getAllProducts)
+//get collection wise product
+router.get("/filter-products",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductbyCollectionId)
 //product by id
 router.get("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductById)
-//get collection wise product
-router.get("/collection/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductbyCollectionId)
 
 module.exports = router

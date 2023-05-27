@@ -141,13 +141,17 @@ const getProductById = asyncHandler(async(req,res)=>{
 const getProductbyCollectionId = asyncHandler(async(req,res)=>{
     
     //get collection ID
-    const {id: collectionId} = req.params
+    const {categories,price} = req.body
 
-    if (!mongoose.Types.ObjectId.isValid(collectionId)) {
-        throw new customerror("Invalid Collection ID", 400);
-    }
-      
-    const products = await product_schema.find({collectionId: collectionId});
+    // if (!mongoose.Types.ObjectId.isValid(collectionId)) {
+    //     throw new customerror("Invalid Collection ID", 400);
+    // }
+    let args = {}
+
+    if (categories.length > 0) args.collectionId = categories
+    if (price.length > 0) args.price = {$gte: price[0],$lte: price[1]}
+    
+    const products = await product_schema.find(args);
      
     if (!products || products.length === 0) {
         throw new customerror("No Products found under this category.")
