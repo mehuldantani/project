@@ -33,7 +33,7 @@ const addProduct = asyncHandler(async (req,res)=>{
 
                 //check for fields
                 if(!fields.name || !fields.price || !fields.description || !fields.collectionId ){
-                    throw new customerror("Product Name,Price,Description and Collection ID required to add a new product.",500)
+                    throw new customerror("Product Name, Price, Description and Category required to add a new product.",500)
                 }
                 
                 //handling images on cloud
