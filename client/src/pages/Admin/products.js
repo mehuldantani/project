@@ -43,7 +43,7 @@ const Products = () => {
           <h1 className='text-center'>Products</h1>
           <div className='d-flex flex-wrap'>
           {products?.map(product => (
-            <div className="card m-2" style={{ width: "18rem" }}>
+            <div className="card m-2 zoom-image" style={{ width: "18rem" }}>
               {product.photos && product.photos.length > 0 ? (
                 <img
                   className="card-img-top"
@@ -60,7 +60,7 @@ const Products = () => {
               <div className="card-body">
                 <h5 className="card-title">{product.name}</h5>
                 <p className="card-text">{product.description}</p>
-                <div className="card-text font-weight-bold"><strong>₹ {product.price}</strong></div>
+                <div className="card-text font-weight-bold"><strong>Rs. {product.price}</strong></div>
               </div>
             </div>
           ))}
