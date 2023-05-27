@@ -7,6 +7,7 @@ import Admindashboard from './pages/Admin/admindashboard.js'
 import Createproduct from './pages/Admin/createproduct.js'
 import Createcategory from './pages/Admin/createcategory.js'
 import Createcoupon from './pages/Admin/createcoupon.js'
+import Products from './pages/Admin/products.js'
 import Register from './pages/Auth/register.js'
 import Login from './pages/Auth/login.js'
 import Dashboard from './pages/user/dashboard.js'
@@ -36,6 +37,7 @@ function App() {
           <Route path='admin/add-category' element = {<Createcategory/>} />
           <Route path='admin/add-coupon' element = {<Createcoupon/>} />
           <Route path='admin/users' element = {<Users/>} />
+          <Route path='admin/products' element = {<Products/>} />
         </Route>
         <Route path='/login' element = {<Login/>} />
         <Route path='/register' element = {<Register/>} />
