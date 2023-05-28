@@ -51,6 +51,56 @@ const Cart = () => {
           }
     }
 
+    const handlePayment = async () => {
+        const productarray = cart.map((obj) => {
+            const newObject = {
+              productId: obj._id,
+              count: 1
+            };
+            return newObject;
+          });
+          console.log(productarray)
+        try{
+            const resp = await axios.post("http://localhost:4000/api/v1/order/razorpay",{
+                "products":productarray,
+                "couponCode":coupon
+            }
+            );
+            if (resp.status === 200 && resp.data.success) {
+              //oepn razorpayid
+              handleOpenRazorpay(resp.data.order.id);
+              toast.success(`Order Created successfully`);
+              
+            } else {
+              // show error message to the user
+              toast.error("Something Went Wrong.");
+            }
+          } catch(error){
+            toast.error("Something Went Wrong.")
+          }
+    }
+
+    const handleOpenRazorpay = (id) => {
+        console.log('here to open window')
+        var options = 
+        {
+            "key": "rzp_test_XGMLMSndKCtHd1", // Enter the Key ID generated from the Dashboard
+            "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "CloudCart",
+            "order_id": id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                toast.success("Payment Successfull")
+                setCart([])
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp = new window.Razorpay(options);
+        rzp.open();
+    }
+
     useEffect(()=>{
         totalMRP();
     },[cart])
@@ -112,7 +162,7 @@ const Cart = () => {
         <h6 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "0" }}>Total Amount:</h6>
         <span style={{ fontSize: "18px", marginLeft: "10px" }}><b>Rs. {Math.floor(totalmrp - coupondiscount*totalmrp)}</b></span>
     </div>
-    <button className='btn btn-primary' style={{ borderRadius: "5px", padding: "10px 20px", fontSize: "16px", fontWeight: "bold" }}>Pay Now</button>
+    <button className='btn btn-primary' style={{ borderRadius: "5px", padding: "10px 20px", fontSize: "16px", fontWeight: "bold" }} onClick={handlePayment}>Pay Now</button>
 </div>
 
             </div>
