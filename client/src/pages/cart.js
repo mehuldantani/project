@@ -8,9 +8,10 @@ import {toast} from 'react-hot-toast'
 const Cart = () => {
 
     const [cart,setCart] = useCart();
-    const [coupon,setCoupon] = useState('')
-    const [totalmrp, setTotalMRP] = useState(0)
-    const [coupondiscount,setCoupondiscount] = useState(0)
+    const [coupon,setCoupon] = useState('');
+    const [totalmrp, setTotalMRP] = useState(0);
+    const [coupondiscount,setCoupondiscount] = useState(0);
+    const [auth,setAuth] = useAuth();
 
     const removeCartItem = (id) => {
         let items = cart.filter((product) => product._id != id)
@@ -59,7 +60,6 @@ const Cart = () => {
             };
             return newObject;
           });
-          console.log(productarray)
         try{
             const resp = await axios.post("http://localhost:4000/api/v1/order/razorpay",{
                 "products":productarray,
@@ -81,17 +81,14 @@ const Cart = () => {
     }
 
     const handleOpenRazorpay = (id) => {
-        console.log('here to open window')
         var options = 
         {
-            "key": "rzp_test_XGMLMSndKCtHd1", // Enter the Key ID generated from the Dashboard
-            "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            "currency": "INR",
             "name": "CloudCart",
             "order_id": id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response){
                 toast.success("Payment Successfull")
                 setCart([])
+                generateOrder(id);
             },
             "theme": {
                 "color": "#3399cc"
@@ -100,6 +97,46 @@ const Cart = () => {
         var rzp = new window.Razorpay(options);
         rzp.open();
     }
+
+    const generateOrder = async (rzp_id) => {
+      try{
+        const productarray = cart.map((obj) => {
+          const newObject = {
+            productId: obj._id,
+            price: obj.price,
+            count: 1
+          };
+          return newObject;
+        });
+        console.log(auth)
+        const neworder = {
+          "razorpayOrderId":rzp_id,
+          "userid":auth.id,
+          "products":productarray,
+          "coupon":coupon,
+          "amount":Math.floor(totalmrp - coupondiscount*totalmrp)
+      };
+        const resp = await axios.post("http://localhost:4000/api/v1/order",neworder);
+        if (resp.status === 200 && resp.data.success) {
+          
+          toast.success(`Order Placed Successfully`);
+          //navigate('/dashboard/admin/products')
+        } else {
+          // show error message to the user
+          toast.error("Something Went Wrong.");
+        }
+      } catch(error){
+        if (error.response) {
+          // handle error response with status code 400
+          toast.error(error.response.data.message);
+          console.log(error.response.data.message)
+        } else {
+          // handle other errors
+          console.log(error);
+          toast.error('Something Went Wrong.');
+        }
+      }
+    };
 
     useEffect(()=>{
         totalMRP();

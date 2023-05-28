@@ -27,7 +27,8 @@ const Login = () => {
           ...auth,
           role:resp.data.userExists.role || 'user',
           user: resp.data.userExists.name,
-          token: resp.data.token
+          token: resp.data.token,
+          id: resp.data.userExists._id
         })
         //set data in local storage
         localStorage.setItem('auth',JSON.stringify(resp.data))

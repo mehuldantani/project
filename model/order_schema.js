@@ -20,8 +20,7 @@ const orderSchema = mongoose.Schema(
             required:true
         },
         phoneNumber:{
-            type:Number,
-            required:true
+            type:Number
         },
         amount:{
             type:Number,

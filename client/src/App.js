@@ -17,7 +17,8 @@ import Forgotpassword from './pages/Auth/forgotpw.js'
 import Resetpassword from './pages/Auth/resetpw.js'
 import AdminRoute from './components/routes/admin.js'
 import Users from './pages/Admin/user.js'
-import Myorders from './pages/user/myorders.js'
+import Myadminorders from './pages/user/myorders.js'
+import Myorders from './pages/user/myordersadmin.js'
 import Myprofile from './pages/user/myprofile.js'
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path='admin/add-category' element = {<Createcategory/>} />
           <Route path='admin/add-coupon' element = {<Createcoupon/>} />
           <Route path='admin/users' element = {<Users/>} />
+          <Route path='admin/orders' element = {<Myadminorders/>} />
           <Route path='admin/products' element = {<Products/>} />
         </Route>
         <Route path='/login' element = {<Login/>} />

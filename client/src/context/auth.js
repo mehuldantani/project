@@ -21,7 +21,8 @@ const AuthProvider = ({ children }) => {
           ...auth,
           user: parseData.userExists.name,
           token: parseData.token,
-          role: parseData.userExists.role
+          role: parseData.userExists.role,
+          id: parseData.userExists._id
         })
       }
 

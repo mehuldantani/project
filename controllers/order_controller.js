@@ -57,7 +57,7 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
         }
     }
     //finalise the price using coupon details if any
-    totalAmount = totalAmount - discountAmount
+    totalAmount = Math.floor(totalAmount - discountAmount)
     
     const options = {
         amount: Math.round(totalAmount*100),    //*100 for converting to paise
@@ -94,7 +94,7 @@ const generateOrder = asyncHandler(async(req,res)=>{
     if(!razorpayOrderId){
         throw new customError("Payment is not completed.",400)
     }
-
+    console.log(products)
     const dbOrder = await order_schema.create({
         products,
         user: userid,
@@ -104,7 +104,6 @@ const generateOrder = asyncHandler(async(req,res)=>{
         transactionId:razorpayOrderId,
         paymentMode: "RazorPay"
     })
-
     if(!dbOrder){
         throw new customError("An Error occured while creating an order.",400)
     }
