@@ -104,6 +104,25 @@ const updateCoupon = asyncHandler(async(req,res)=>{
 
 })
 
+const getCouponbycode = asyncHandler(async(req,res)=>{
+    //get couponID
+    const {code} = req.body
+    
+    //update the coupon
+    const coupon = await coupon_schema.find({code})
+
+    if(!coupon){
+        throw new customError("Invalid Coupon Code",400)
+    }
+
+    //send response
+    res.status(200).json({
+        success:true,
+        coupon
+    })
+
+})
+
 /**********************************************************
  * @DELETE_COUPON
  * @route https://localhost:5000/api/coupon/:couponId
@@ -152,4 +171,4 @@ const getAllCoupons = asyncHandler(async(req,res)=>{
     })
 })
 
-module.exports = {createCoupon,deactiveCoupon,deleteCoupon,getAllCoupons,updateCoupon}
+module.exports = {createCoupon,deactiveCoupon,deleteCoupon,getAllCoupons,updateCoupon,getCouponbycode}
