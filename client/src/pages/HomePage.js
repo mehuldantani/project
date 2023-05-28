@@ -4,8 +4,11 @@ import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import {Checkbox,Radio} from 'antd'
 import {prices} from '../components/layout/filterprices.js'
+import {useCart} from '../context/cart.js'
 
 const HomePage = () => {
+
+  const [cart,setCart] = useCart([])
 
   const [products,setProducts] = useState([])
   const [categories, setCategories] = useState([]);
@@ -99,6 +102,7 @@ const HomePage = () => {
     } catch (error) {
       if (error.response) {
         // handle error response with status code 400
+        setProducts([])
         toast.error(error.response.data.message);
       } else {
         // handle other errors
@@ -148,25 +152,34 @@ const HomePage = () => {
           <h4 className='text-left'>Best of CloudCart Exclusive</h4>
           <div className='d-flex flex-wrap'>
           {products?.map(product => (
-            <div className="card m-2 zoom-image" style={{ width: "18rem" }}>
+            <div className="card m-2 zoom-image" style={{ width: "15rem" }}>
               {product.photos && product.photos.length > 0 ? (
                 <img
-                  className="card-img-top"
+                  className="card-img-top m-4 zoom-image"
                   src={product.photos[0].secure_url}
                   alt={product.name}
+                  style={{ width: "80%", height: "200px" }}
                 />
               ) : (
                 <img
-                  className="card-img-top"
+                  className="card-img-top m-4"
                   src='https://cloud-cart.s3.ap-south-1.amazonaws.com/products/6471f1fe66f3b36622234f30/photo_1.png'
                   alt='No Image'
+                  style={{ width: "80%", height: "200px" }}
                 />
               )}
               <div className="card-body">
                 <h5 className="card-title"><strong>{product.name}</strong></h5>
                 <p className="card-text">{product.description.substring(0,100)}</p>
                 <div className="card-text font-weight-bold"><h6>Rs. {product.price}</h6></div>
-                <button className='btn btn-primary'>Add to Cart</button>
+                <button className="btn btn-primary" onClick={() => {
+                  setCart([...cart, product]);
+                  localStorage.setItem('cart',JSON.stringify([...cart, product]))
+                  toast.success(`${product.name} Added to Cart`);
+                }}>
+                  Add to Cart
+                </button>
+
               </div>
             </div>
           ))}

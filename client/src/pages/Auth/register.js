@@ -39,7 +39,6 @@ const Register = () => {
     }
   
     return (
-      <Layout>
   <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="max-width-250 rounded p-5 login-container">
       <h2 class="text-center mb-4">Sign Up</h2>
@@ -87,8 +86,6 @@ const Register = () => {
       </div>
     </div>
   </div>
-</Layout>
-  
     )
   }
 

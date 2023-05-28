@@ -4,10 +4,13 @@ import {HiShoppingCart} from 'react-icons/hi'
 import { useAuth } from '../../context/auth'
 import axios from 'axios'
 import toast from 'react-hot-toast';
+import {useCart} from '../../context/cart'
 
 const Header = () => {
 
   const [auth,setAuth] = useAuth();
+  const [cart] = useCart();
+
   const navigate = useNavigate()
   const HandleLougout = async (e)=>{
     e.preventDefault()
@@ -41,11 +44,11 @@ const Header = () => {
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-  <div className="brand">
+    <div className="brand">
     <Link to="/" className="navbar-brand">
       <HiShoppingCart style={{ fontSize: "40px" }} /> CloudCart
     </Link>
-  </div>
+    </div>
   <button
     className="navbar-toggler"
     type="button"
@@ -62,11 +65,6 @@ const Header = () => {
       <li className="nav-item">
         <NavLink to="/asd" className="nav-link">
           Categories
-        </NavLink>
-      </li>
-      <li className="nav-item">
-        <NavLink to="/contact" className="nav-link">
-          Coupons
         </NavLink>
       </li>
       {auth.user ? (
@@ -111,15 +109,16 @@ const Header = () => {
     </li>
   </>
 )}
-
       <li className="nav-item">
-        <NavLink to="/as" className="nav-link">
-          Cart(0)
+        <NavLink to="/cart" className="nav-link">
+        <span className="position-relative">
+          Cart <span className="badge badge-pill badge-secondary cart-badge">{cart.length}</span>
+        </span>
         </NavLink>
       </li>
     </ul>
   </div>
-</nav>;
+</nav>
 
     </>
   )

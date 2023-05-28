@@ -2,6 +2,7 @@ import {Routes,Route} from 'react-router-dom'
 import Homepage from './pages/HomePage.js'
 import Contact from './pages/contact.js'
 import About from './pages/About.js'
+import Cart from './pages/cart.js'
 import PageNotFound from './pages/pagenotfound.js'
 import Admindashboard from './pages/Admin/admindashboard.js'
 import Createproduct from './pages/Admin/createproduct.js'
@@ -24,6 +25,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<PrivateRoute/>}>
+          <Route path='/cart' element = {<Cart/>} />
           <Route path='' element = {<Homepage/>} />
         </Route>
         <Route path="/dashboard" element={<PrivateRoute/>}>
