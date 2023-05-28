@@ -147,9 +147,8 @@ const getProductbyCollectionId = asyncHandler(async(req,res)=>{
     //     throw new customerror("Invalid Collection ID", 400);
     // }
     let args = {}
-
-    if (categories.length > 0) args.collectionId = categories
-    if (price.length > 0) args.price = {$gte: price[0],$lte: price[1]}
+    if (categories?.length > 0) args.collectionId = categories
+    if (price?.length > 0) args.price = {$gte: price[0],$lte: price[1]}
     
     const products = await product_schema.find(args);
      

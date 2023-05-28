@@ -7,12 +7,12 @@ const router = Router()
 
 //add product
 router.post("/",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),addProduct)
+//get collection wise product
+router.post("/filter-products",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductbyCollectionId)
 //delete the product
 router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),deleteProduct)
 //check all products
 router.get("/",islogedin,authorize(AuthRoles.ADMIN),getAllProducts)
-//get collection wise product
-router.get("/filter-products",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductbyCollectionId)
 //product by id
 router.get("/:id",islogedin,authorize(AuthRoles.ADMIN,AuthRoles.MODERATOR),getProductById)
 

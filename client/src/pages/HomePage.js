@@ -1,7 +1,5 @@
 import React,{useState,useEffect} from 'react';
 import Layout from '../components/layout/layout.js';
-import {Link} from 'react-router-dom'
-import { useAuth } from '../context/auth.js';
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import {Checkbox,Radio} from 'antd'
@@ -9,19 +7,33 @@ import {prices} from '../components/layout/filterprices.js'
 
 const HomePage = () => {
 
-  const [auth,setAuth] = useAuth()
   const [products,setProducts] = useState([])
   const [categories, setCategories] = useState([]);
   const [checked,setCheceked] = useState([])
   const [radio,setRadio] = useState([])
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  useEffect(() => {
+    if ((!checked.length || !radio.length) && !(checked.length && radio.length)) {
+      getallproducts();
+    }
+  }, [checked.length, radio.length]);
+  
+
+  useEffect(() => {
+    if (checked.length || radio.length) filteredproducts();
+  }, [checked.length, radio.length]);
 
   const getallproducts = async ()=>{
     try {
       const resp = await axios.get('/api/v1/product');
 
       if (resp.status === 200 && resp.data?.success) {
+        console.log('called all product')
         setProducts(resp.data.products); // Set categories directly without Object.entries()
-        console.log(products)
       }
     } catch (error) {
       if (error.response) {
@@ -41,8 +53,6 @@ const HomePage = () => {
       const resp = await axios.get('http://localhost:4000/api/v1/collection');
 
       if (resp.status === 200 && resp.data.success) {
-        console.log('req is true');
-        console.log(resp.data.allCollections);
         setCategories(resp.data.allCollections); // Set categories directly without Object.entries()
       }
     } catch (error) {
@@ -69,10 +79,34 @@ const HomePage = () => {
     setCheceked(all);
   }
 
-  useEffect(() => {
-    getallproducts();
-    getAllCategories();
-  }, []);
+  const filteredproducts = async () =>{
+
+    const args = {
+      "categories":checked,
+      "price":radio
+      };
+
+    try {
+      console.log(args)
+      const resp = await axios.post('http://localhost:4000/api/v1/product/filter-products',args);
+
+      if (resp.status === 200 && resp.data?.success) {
+        console.log('filtered',resp.data.products)
+        setProducts(resp.data.products); // Set categories directly without Object.entries()
+        
+      }
+    } catch (error) {
+      if (error.response) {
+        // handle error response with status code 400
+        toast.error(error.response.data.message);
+      } else {
+        // handle other errors
+        console.log(error);
+        toast.error('Something Went Wrong.');
+      }
+    }
+  }
+
   return (
     <Layout>
       <div className='container-fluid m-3 p-3'>
