@@ -132,6 +132,17 @@ const HomePage = () => {
           ))}
           </Radio.Group>
           </div>
+          <div className='d-flex flex-column m-2 float-right'>
+            <button style={{
+              backgroundColor: "transparent",
+              color: "black",
+              border: "1px solid gray",
+              width: 70
+            }} onClick={()=>{
+                        setCheceked([])
+                        setRadio([])
+                      }}>Reset</button>
+          </div>
         </div>
         <div className='col-md-10'>
           <h4 className='text-left'>Best of CloudCart Exclusive</h4>
