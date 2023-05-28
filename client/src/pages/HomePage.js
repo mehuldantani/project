@@ -15,13 +15,14 @@ const HomePage = () => {
   useEffect(() => {
     getAllCategories();
   }, []);
-
+  
   useEffect(() => {
-    if ((!checked.length || !radio.length) && !(checked.length && radio.length)) {
+    if (checked.length === 0 && radio.length === 0) {
       getallproducts();
     }
   }, [checked.length, radio.length]);
   
+
 
   useEffect(() => {
     if (checked.length || radio.length) filteredproducts();
