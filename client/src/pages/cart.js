@@ -4,9 +4,11 @@ import {useCart} from '../context/cart.js'
 import {useAuth} from '../context/auth.js'
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
+import {useNavigate} from 'react-router-dom'
 
 const Cart = () => {
-
+    
+    const navigate = useNavigate();
     const [cart,setCart] = useCart();
     const [coupon,setCoupon] = useState('');
     const [totalmrp, setTotalMRP] = useState(0);
@@ -118,9 +120,13 @@ const Cart = () => {
       };
         const resp = await axios.post("http://localhost:4000/api/v1/order",neworder);
         if (resp.status === 200 && resp.data.success) {
-          
+          if(auth.Role == 'ADMIN'){
+            navigate('/dashboard/admin/orders');
+          }
+          else{
+            navigate('/dashboard/user/orders');
+          }
           toast.success(`Order Placed Successfully`);
-          //navigate('/dashboard/admin/products')
         } else {
           // show error message to the user
           toast.error("Something Went Wrong.");
