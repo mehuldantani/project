@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../../components/layout/layout'
 import Adminmenu from '../../components/layout/adminmenu.js'
 
+
 const user = () => {
   return (
     <Layout>
