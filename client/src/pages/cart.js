@@ -104,13 +104,12 @@ const Cart = () => {
       try{
         const productarray = cart.map((obj) => {
           const newObject = {
-            productId: obj._id,
+            productid: obj._id,
             price: obj.price,
             count: 1
           };
           return newObject;
         });
-        console.log(auth)
         const neworder = {
           "razorpayOrderId":rzp_id,
           "userid":auth.id,
@@ -120,7 +119,7 @@ const Cart = () => {
       };
         const resp = await axios.post("http://localhost:4000/api/v1/order",neworder);
         if (resp.status === 200 && resp.data.success) {
-          if(auth.Role == 'ADMIN'){
+          if(auth.role == 'ADMIN'){
             navigate('/dashboard/admin/orders');
           }
           else{

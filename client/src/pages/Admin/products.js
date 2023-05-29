@@ -43,18 +43,20 @@ const Products = () => {
           <h1 className='text-center'>Products</h1>
           <div className='d-flex flex-wrap'>
           {products?.map(product => (
-            <div className="card m-2 zoom-image" style={{ width: "18rem" }}>
+            <div className="card m-2 zoom-image" style={{ width: "15rem" }}>
               {product.photos && product.photos.length > 0 ? (
                 <img
-                  className="card-img-top"
+                  className="card-img-top m-4 zoom-image"
                   src={product.photos[0].secure_url}
                   alt={product.name}
+                  style={{ width: "80%", height: "200px" }}
                 />
               ) : (
                 <img
                   className="card-img-top"
                   src='https://cloud-cart.s3.ap-south-1.amazonaws.com/products/6471f1fe66f3b36622234f30/photo_1.png'
                   alt='No Image'
+                  style={{ width: "80%", height: "200px" }}
                 />
               )}
               <div className="card-body">
