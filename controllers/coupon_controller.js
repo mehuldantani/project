@@ -109,7 +109,7 @@ const getCouponbycode = asyncHandler(async(req,res)=>{
     const {code} = req.body
     
     //update the coupon
-    const coupon = await coupon_schema.find({code})
+    const coupon = await coupon_schema.find( { "code" : { $regex : new RegExp(code, "i") } } );
 
     if(!coupon){
         throw new customError("Invalid Coupon Code",400)
