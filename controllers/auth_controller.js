@@ -157,7 +157,7 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     await existingUser.save({validateBeforeSave: false})
 
     //generate reset password url
-    const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`
+    const resetUrl = `https://cloud-cart.netlify.app/resetpassword/${resetToken}`
 
     //send and email
     try {
