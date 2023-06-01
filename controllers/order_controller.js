@@ -1,15 +1,12 @@
-const product_schema = require("../model/product_shcema.js")
 const coupon_schema = require("../model/coupon_schema.js")
-const order = require("../model/order_schema.js")
 const asyncHandler = require("../services/async_handler.js")
 const customError = require("../utils/custom_error.js")
 const razorpay = require("../config/razorpay_config.js")
 const product_shcema = require("../model/product_shcema.js")
 const user_schema = require("../model/user_schema.js")
-const { CustomerProfiles } = require("aws-sdk")
-const CustomError = require("../utils/custom_error.js")
 const order_schema = require("../model/order_schema.js")
 const mongoose = require("mongoose")
+const emailsend = require("../utils/email.js")
 /******************************************************
  * @Generate_razorpay_id   POST request
  * @route http://localhost:4000/api/order/razorpay
@@ -106,6 +103,31 @@ const generateOrder = asyncHandler(async(req,res)=>{
     })
     if(!dbOrder){
         throw new customError("An Error occured while creating an order.",400)
+    }
+    const resetUrl = `https://cloud-cart.netlify.app/dashboard/admin/orders`;
+
+    try {
+        
+        const createdAtIST = new Date(dbOrder.createdAt).toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          });
+
+        await emailsend({
+            template:'orderplaced',
+            email: dbUser.email,
+            subject: `Your CloudCart Order has been received!` ,
+            navigateLink:resetUrl,
+            name: dbUser.name,
+            amount: `Rs. ${dbOrder.amount}`,
+            orderdate: createdAtIST,
+            orderid: dbOrder._id
+        })
+
+    } catch (error) {
+        throw new customError("Error occured while sending on email")
     }
 
     res.status(200).json({

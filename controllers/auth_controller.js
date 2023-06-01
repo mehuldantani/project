@@ -46,6 +46,18 @@ const signUp = asyncHandler(async (req,res) => {
     //console.log(user)
     //need to do this as select false will only apply when selecitng and not when Creating
     user.password = undefined
+    const resetUrl = `https://cloud-cart.netlify.app`
+    try {
+        await emailsend({
+            template:'newUser',
+            email: user.email,
+            subject: `Welcome to ClouCart. -${user.name}` ,
+            navigateLink:resetUrl,
+            name: user.name
+        })
+    } catch (error) {
+        
+    }
 
     res.cookie("token",token,cookieOptions)
     res.status(200).json({
@@ -162,9 +174,10 @@ const forgotPassword = asyncHandler(async(req,res)=>{
     //send and email
     try {
         await emailsend({
+            template:'forgotPw',
             email: existingUser.email,
             subject: `Reset password -${existingUser.name}` ,
-            text:resetUrl,
+            navigateLink:resetUrl,
             name: existingUser.name
         })
 
