@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const AuthRoles = require('../utils/authroles')
+const {AuthRoles} = require('../utils/authroles')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const crypto = require("crypto")     //This  is default package comes with Nodejs.

@@ -33,6 +33,10 @@ const signUp = asyncHandler(async (req,res) => {
         throw new customerror('User already exists please use signup option',400)
     }
 
+    if (password.length < 8) {
+        throw new customerror('Password should be at least 8 characters long', 400);
+    }
+
     //create a user
 
     const user = await User.create({
