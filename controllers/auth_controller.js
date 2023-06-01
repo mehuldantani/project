@@ -51,7 +51,7 @@ const signUp = asyncHandler(async (req,res) => {
         await emailsend({
             template:'newUser',
             email: user.email,
-            subject: `Welcome to ClouCart. -${user.name}` ,
+            subject: `Welcome to CloudCart. -${user.name}` ,
             navigateLink:resetUrl,
             name: user.name
         })
