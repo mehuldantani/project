@@ -141,7 +141,7 @@ const generateOrder = asyncHandler(async(req,res)=>{
 const getMyOrders = asyncHandler(async(req, res) => {
     const {id:userId} = req.params
 
-    const myOrders = await order_schema.findOne({user:userId}).sort({ createdAt: -1 })
+    const myOrders = await order_schema.find({user:userId}).sort({ createdAt: -1 })
 
     if(!myOrders){
         throw new customError("No Order Found",400)

@@ -3,7 +3,6 @@ const newUser = () => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Order Confirmation</title>
   <style>
     /* CSS Styles */
     body {
