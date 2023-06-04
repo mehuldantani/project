@@ -22,11 +22,11 @@ const orderPlaced = (name, navigateLink,orderid,orderdate,amount) => {
         }
     
         h1 {
+          margin: 0 0 20px;
           font-size: 24px;
-          color: #333333;
-          margin: 0;
+          font-weight: 700;
           text-align: center;
-          margin-bottom: 20px;
+          color: #007bff;
         }
     
         p {
