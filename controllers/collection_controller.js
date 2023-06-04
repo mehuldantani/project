@@ -1,4 +1,5 @@
 const collection_schema = require( "../model/collection_schema.js")
+const product_schema = require("../model/product_shcema.js")
 const asyncHandler = require( '../services/async_handler.js')
 const customerror = require( '../utils/custom_error.js')
 
@@ -18,6 +19,12 @@ const createCollection = asyncHandler(async (req,res)=>{
     //validate data
     if(!name){
         throw new customerror('Please provide a message of collection name.',400)
+    }
+
+    const duplicate = await collection_schema.find({ "name": { $regex: new RegExp('^' + name + '$', 'i') } });
+
+    if(duplicate.length > 0){
+        throw new customerror('Category already exists with the same name.',400)
     }
 
     //add to database
@@ -51,6 +58,12 @@ const updateCollection = asyncHandler(async (req,res)=>{
     //validate data
     if(!name){
         throw new customerror('Please provide a message of collection name.',400)
+    }
+
+    const duplicate = await collection_schema.find({ "name": { $regex: new RegExp('^' + name + '$', 'i') } });
+
+    if(duplicate.length > 0){
+        throw new customerror('Category already exists with the same name.',400)
     }
 
     //find by id update
@@ -89,6 +102,12 @@ const deleteCollection = asyncHandler(async (req,res)=>{
 
     //Get colleciton id
     const {id: collectionid} = req.params
+
+    const linkedproduct = await product_schema.findOne({"collectionId":collectionid})
+
+    if(linkedproduct){
+        throw new customerror('Product is added under this category. It can not be deleted.',400)
+    }
 
     //find by id update
     const deleted_collection = await collection_schema.findByIdAndDelete(collectionid)

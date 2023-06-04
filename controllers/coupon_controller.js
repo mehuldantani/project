@@ -1,4 +1,5 @@
 const coupon_schema = require("../model/coupon_schema.js")
+const order_schema = require("../model/order_schema.js")
 const asyncHandler = require("../services/async_handler.js")
 const customError = require("../utils/custom_error.js")
 
@@ -16,6 +17,12 @@ const createCoupon = asyncHandler(async(req,resp)=>{
     //validate
     if(!(code || discount)){
         throw new customError("Please provide all the required fields.",400)
+    }
+
+    const duplicate = await coupon_schema.find({code})
+
+    if(duplicate.length > 0){
+        throw new customError("Coupon already exists with the same code.",400)
     }
 
     const coupon = await coupon_schema.create({
@@ -135,6 +142,16 @@ const deleteCoupon = asyncHandler(async(req,res)=>{
     //get couponID
     const  {id: couponId} = req.params
     
+    //get coupon code
+    const getcoupon = await coupon_schema.findById(couponId)
+    const couponcode = getcoupon.code;
+    
+    const orders = await order_schema.find({"coupon":couponcode})
+
+    if(orders.length > 0){
+        throw new customError("Used Coupon can not be deleted.",400)
+    }
+
     //delete the coupon
     const coupon = await coupon_schema.findByIdAndDelete(couponId)
 
