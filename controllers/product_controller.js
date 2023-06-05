@@ -1,4 +1,5 @@
 const product_schema = require("../model/product_shcema.js")
+const order_schema = require("../model/order_schema.js")
 const {s3fileupload,s3filedelete} = require("../services/file_upload.js")
 const asyncHandler = require('../services/async_handler.js')
 const customerror = require('../utils/custom_error.js')
@@ -171,6 +172,12 @@ const deleteProduct = asyncHandler(async(req,res)=>{
     if(!product){
         throw new customerror("No product found", 404)
     }
+
+    const orderswithproductid = await order_schema.find({"products.productid":productID})
+
+    if(orderswithproductid.length > 0){
+        throw new customerror("This product is already ordered.",400)
+    };
 
     let deletephotosfromS3 = Promise.all(
         product.photos.map(async(element,index)=>{
