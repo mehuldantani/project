@@ -43,7 +43,6 @@ const generateRazorpayID = asyncHandler(async(req,res)=>{
     await productPriceCal
 
     let discountAmount = 0;
-    console.log(totalAmount)
     //if coupon exists then apply coupon code
     if(couponCode.length > 0){
         //verify couponcode in db
@@ -91,7 +90,6 @@ const generateOrder = asyncHandler(async(req,res)=>{
     if(!razorpayOrderId){
         throw new customError("Payment is not completed.",400)
     }
-    console.log(products)
     const dbOrder = await order_schema.create({
         products,
         user: userid,

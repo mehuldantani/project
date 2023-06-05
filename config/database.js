@@ -14,7 +14,6 @@ exports.connect = () => {
         console.log('DB Connected Successfully.')
     }).catch((error) => {
         console.log('DB connection failed.')
-        console.log(error)
 
         // exit with failure code 1- failure 0-close after db connect
         process.exit(1)

@@ -26,7 +26,6 @@ const signUp = asyncHandler(async (req,res) => {
     }
 
     //check if user exists
-    console.log(email,password)
 
     const existingUser = await User.findOne({email})
     if(existingUser){
@@ -47,7 +46,6 @@ const signUp = asyncHandler(async (req,res) => {
 
     //get token from schema
     const token = user.getJwtToken()
-    //console.log(user)
     //need to do this as select false will only apply when selecitng and not when Creating
     user.password = undefined
     const resetUrl = `https://cloud-cart.netlify.app`
@@ -195,7 +193,6 @@ const forgotPassword = asyncHandler(async(req,res)=>{
         //Rollback the chanes on email failure
         existingUser.forgotpasswordExpiry = undefined
         existingUser.forgotpasswordToken = undefined
-        console.log(err)
         throw new customerror('Error in Email Send',400)
     }
 })
