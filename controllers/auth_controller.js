@@ -1,4 +1,5 @@
 const User = require("../model/user_schema.js")
+const order_schema = require("../model/order_schema.js")
 const asyncHandler = require('../services/async_handler.js')
 const customerror = require('../utils/custom_error.js')
 const emailsend = require("../utils/email.js")
@@ -283,4 +284,42 @@ const getProfile = asyncHandler(async(req,res)=>{
 
 })
 
-module.exports = {cookieOptions,getProfile,forgotPassword,login,logout,resetPassword,signUp };
+const getAllusers = asyncHandler(async(req,res)=>{
+    const users = await User.find().sort({ name: 1 })
+
+    if(!users){
+        throw new customerror("No Coupons Found.",400)
+    }
+
+    res.status(200).json({
+        success:"true",
+        users
+    })
+})
+
+const deleteUser = asyncHandler(async(req,res)=>{
+    //get couponID
+    const  {id: userId} = req.params
+    
+    const orders = await order_schema.find({"user":userId})
+
+    if(orders.length > 0){
+        throw new customerror("User has a Order history. It can not be deleted.",400)
+    }
+
+    //delete the user
+    const user = await User.findByIdAndDelete(userId)
+
+    if(!user){
+        throw new customError("Error while deleting the coupon.",400)
+    }
+
+    //send response
+    res.status(200).json({
+        success:true,
+        user
+    })
+
+})
+
+module.exports = {cookieOptions,deleteUser,getProfile,forgotPassword,login,logout,resetPassword,signUp,getAllusers };

@@ -1,5 +1,5 @@
 const Router = require("express")
-const {forgotPassword,getProfile,login,logout,resetPassword,signUp} = require("../controllers/auth_controller")
+const {forgotPassword,getProfile,deleteUser,login,logout,resetPassword,signUp,getAllusers} = require("../controllers/auth_controller")
 const {islogedin,authorize} = require("../middlewares/auth_middleware")
 const {AuthRoles} = require("../utils/authroles")
 
@@ -15,6 +15,7 @@ router.post("/password/reset/:token",resetPassword)
 //set get routers
 router.get("/logout",logout)
 router.get("/profile",islogedin, getProfile)
+router.get("/allusers",islogedin, getAllusers)
 
 //protected route
 router.get("/user-auth",islogedin,(req,res)=>{
@@ -25,5 +26,8 @@ router.get("/user-auth",islogedin,(req,res)=>{
 router.post("/admin-auth",islogedin,authorize(AuthRoles.ADMIN),(req,res)=>{
     res.status(200).send({ok:true});
 })
+
+
+router.delete("/:id",islogedin,authorize(AuthRoles.ADMIN),deleteUser)
 
 module.exports = router

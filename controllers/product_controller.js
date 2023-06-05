@@ -45,7 +45,6 @@ const addProduct = asyncHandler(async (req,res)=>{
                         //get individual file key
                         const element = files[filekey]
                         const path = fs.createReadStream(element.filepath)
-                        console.log(path)
                         const upload = await s3fileupload({
                             bucketName: config.S3_BUCKET_NAME,
                             key: `products/${productId}/photo_${index+1}.png`,
