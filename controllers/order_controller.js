@@ -139,7 +139,10 @@ const generateOrder = asyncHandler(async(req,res)=>{
 const getMyOrders = asyncHandler(async(req, res) => {
     const {id:userId} = req.params
 
-    const myOrders = await order_schema.find({user:userId}).sort({ createdAt: -1 })
+    const myOrders = await order_schema.find({user:userId})
+                            .populate('user', 'name')
+                            .populate('products.productid','name photos')
+                            .sort({ createdAt: -1 })
 
     if(!myOrders){
         throw new customError("No Order Found",400)
@@ -154,7 +157,10 @@ const getMyOrders = asyncHandler(async(req, res) => {
 
 //Todo: get all my orders: Admin
 const getAllOrders = asyncHandler(async(req, res) => {
-    const allOrders = await order_schema.find().sort({ createdAt: -1 })
+    const allOrders = await order_schema.find()
+                    .populate('user', 'name')
+                    .populate('products.productid','name photos')
+                    .sort({ createdAt: -1 })
 
     if(!allOrders){
         throw new customError("No Orders Found.",400)
