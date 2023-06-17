@@ -1,12 +1,12 @@
-const coupon_schema = require("../model/coupon_schema.js")
-const asyncHandler = require("../services/async_handler.js")
-const customError = require("../utils/custom_error.js")
-const razorpay = require("../config/razorpay_config.js")
-const product_shcema = require("../model/product_shcema.js")
-const user_schema = require("../model/user_schema.js")
-const order_schema = require("../model/order_schema.js")
-const mongoose = require("mongoose")
-const emailsend = require("../utils/email.js")
+const coupon_schema = require("../model/coupon_schema.js");
+const asyncHandler = require("../services/async_handler.js");
+const customError = require("../utils/custom_error.js");
+const razorpay = require("../config/razorpay_config.js");
+const product_shcema = require("../model/product_shcema.js");
+const user_schema = require("../model/user_schema.js");
+const order_schema = require("../model/order_schema.js");
+const mongoose = require("mongoose");
+const emailsend = require("../utils/email.js");
 /******************************************************
  * @Generate_razorpay_id   POST request
  * @route http://localhost:4000/api/order/razorpay
@@ -16,194 +16,197 @@ const emailsend = require("../utils/email.js")
  ********************************************************/
 
 //generate razorpay order ID
-const generateRazorpayID = asyncHandler(async(req,res)=>{
-    //get product and coupon
-    const {products,couponCode} = req.body
+const generateRazorpayID = asyncHandler(async (req, res) => {
+  //get product and coupon
+  const { products, couponCode } = req.body;
 
-    //product should be there
-    if(!products || products.length === 0){
-        throw new customError("No Products Found.",400)
-    }
+  //product should be there
+  if (!products || products.length === 0) {
+    throw new customError("No Products Found.", 400);
+  }
 
-    let totalAmount = 0;
+  let totalAmount = 0;
 
-    let productPriceCal = Promise.all(products.map(
-        async(product) =>{
-            const {productId,count} = product
-            //check product with DB
-            const dbProduct = await product_shcema.findById(productId)
-            if(!dbProduct){
-                throw new customError("No Product Found.",400)
-            }
-            totalAmount = totalAmount + dbProduct.price * count
-        }
-    ))
-
-    //execute all the promises
-    await productPriceCal
-
-    let discountAmount = 0;
-    //if coupon exists then apply coupon code
-    if(couponCode.length > 0){
-        //verify couponcode in db
-        const dbCoupon = await coupon_schema.findOne({code: couponCode})
-
-        if(dbCoupon){
-            discountAmount = totalAmount*(dbCoupon.discount/100)
-        }
-    }
-    //finalise the price using coupon details if any
-    totalAmount = Math.floor(totalAmount - discountAmount)
-    
-    const options = {
-        amount: Math.round(totalAmount*100),    //*100 for converting to paise
-        currency: "INR",
-        receipt: `receiptID_${new Date().getTime()}`
-    }
-    const order = await razorpay.orders.create(options)
-
-    if(!order){
-        throw new customError('UNable to generate order',400)
-    }
-
-    res.status(200).json({
-        success: true,
-        message: "razorpay order id generated successfully",
-        order
+  let productPriceCal = Promise.all(
+    products.map(async (product) => {
+      const { productId, count } = product;
+      //check product with DB
+      const dbProduct = await product_shcema.findById(productId);
+      if (!dbProduct) {
+        throw new customError("No Product Found.", 400);
+      }
+      totalAmount = totalAmount + dbProduct.price * count;
     })
-})
+  );
+
+  //execute all the promises
+  await productPriceCal;
+
+  let discountAmount = 0;
+  //if coupon exists then apply coupon code
+  if (couponCode.length > 0) {
+    //verify couponcode in db
+    const dbCoupon = await coupon_schema.findOne({ code: couponCode });
+
+    if (dbCoupon) {
+      discountAmount = totalAmount * (dbCoupon.discount / 100);
+    }
+  }
+  //finalise the price using coupon details if any
+  totalAmount = Math.floor(totalAmount - discountAmount);
+
+  const options = {
+    amount: Math.round(totalAmount * 100), //*100 for converting to paise
+    currency: "INR",
+    receipt: `receiptID_${new Date().getTime()}`,
+  };
+  const order = await razorpay.orders.create(options);
+
+  if (!order) {
+    throw new customError("UNable to generate order", 400);
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "razorpay order id generated successfully",
+    order,
+  });
+});
 
 //create order in DB
-const generateOrder = asyncHandler(async(req,res)=>{
-    const {razorpayOrderId,userid,phoneNumber,products,coupon,amount} = req.body
+const generateOrder = asyncHandler(async (req, res) => {
+  const { razorpayOrderId, userid, phoneNumber, products, coupon, amount } =
+    req.body;
 
-    const dbUser = await user_schema.findById(userid)
+  const dbUser = await user_schema.findById(userid);
 
-    if(!dbUser){
-        throw new customError("No user found with this details.")
-    }
-    
-    if(!products){
-        throw new customError("please add product first.",400)
-    }
+  if (!dbUser) {
+    throw new customError("No user found with this details.");
+  }
 
-    if(!razorpayOrderId){
-        throw new customError("Payment is not completed.",400)
-    }
-    const dbOrder = await order_schema.create({
-        products,
-        user: userid,
-        phoneNumber,
-        amount,
-        coupon,
-        transactionId:razorpayOrderId,
-        paymentMode: "RazorPay"
-    })
-    if(!dbOrder){
-        throw new customError("An Error occured while creating an order.",400)
-    }
-    const resetUrl = `https://cloud-cart.netlify.app/dashboard/admin/orders`;
+  if (!products) {
+    throw new customError("please add product first.", 400);
+  }
 
-    try {
-        
-        const createdAtIST = new Date(dbOrder.createdAt).toLocaleString("en-IN", {
-            timeZone: "Asia/Kolkata",
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-          });
+  if (!razorpayOrderId) {
+    throw new customError("Payment is not completed.", 400);
+  }
+  const dbOrder = await order_schema.create({
+    products,
+    user: userid,
+    phoneNumber,
+    amount,
+    coupon,
+    transactionId: razorpayOrderId,
+    paymentMode: "RazorPay",
+  });
+  if (!dbOrder) {
+    throw new customError("An Error occured while creating an order.", 400);
+  }
+  const resetUrl = `https://cloud-cart.netlify.app/dashboard/admin/orders`;
 
-        await emailsend({
-            template:'orderplaced',
-            email: dbUser.email,
-            subject: `Your CloudCart Order has been received!` ,
-            navigateLink:resetUrl,
-            name: dbUser.name,
-            amount: `Rs. ${dbOrder.amount}`,
-            orderdate: createdAtIST,
-            orderid: dbOrder._id
-        })
+  try {
+    const createdAtIST = new Date(dbOrder.createdAt).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
 
-    } catch (error) {
-        throw new customError("Error occured while sending on email")
-    }
+    await emailsend({
+      template: "orderplaced",
+      email: dbUser.email,
+      subject: `Your CloudCart Order has been received!`,
+      navigateLink: resetUrl,
+      name: dbUser.name,
+      amount: `Rs. ${dbOrder.amount}`,
+      orderdate: createdAtIST,
+      orderid: dbOrder._id,
+    });
+  } catch (error) {
+    throw new customError("Error occured while sending on email");
+  }
 
-    res.status(200).json({
-        success:true,
-        dbOrder
-    })
-
-})
+  res.status(200).json({
+    success: true,
+    dbOrder,
+  });
+});
 
 //get my orders
-const getMyOrders = asyncHandler(async(req, res) => {
-    const {id:userId} = req.params
+const getMyOrders = asyncHandler(async (req, res) => {
+  const { id: userId } = req.params;
 
-    const myOrders = await order_schema.find({user:userId})
-                            .populate('user', 'name')
-                            .populate('products.productid','name photos')
-                            .sort({ createdAt: -1 })
+  const myOrders = await order_schema
+    .find({ user: userId })
+    .populate("user", "name")
+    .populate("products.productid", "name photos")
+    .sort({ createdAt: -1 });
 
-    if(!myOrders){
-        throw new customError("No Order Found",400)
-    }
+  if (!myOrders) {
+    throw new customError("No Order Found", 400);
+  }
 
-    res.status(200).json({
-        success:true,
-        myOrders
-    })
-
-})
+  res.status(200).json({
+    success: true,
+    myOrders,
+  });
+});
 
 //Todo: get all my orders: Admin
-const getAllOrders = asyncHandler(async(req, res) => {
-    const allOrders = await order_schema.find()
-                    .populate('user', 'name')
-                    .populate('products.productid','name photos')
-                    .sort({ createdAt: -1 })
+const getAllOrders = asyncHandler(async (req, res) => {
+  const allOrders = await order_schema
+    .find()
+    .populate("user", "name")
+    .populate("products.productid", "name photos")
+    .sort({ createdAt: -1 });
 
-    if(!allOrders){
-        throw new customError("No Orders Found.",400)
-    }
+  if (!allOrders) {
+    throw new customError("No Orders Found.", 400);
+  }
 
-    res.status(200).json({
-        success:true,
-        allOrders
-    })
-
-})
-
+  res.status(200).json({
+    success: true,
+    allOrders,
+  });
+});
 
 //Todo: update order Status: Admin
-const updateOrderStatus = asyncHandler(async(req, res) => {
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  //get couponID
+  const { id: orderId } = req.params;
+  const { status } = req.body;
 
-    //get couponID
-    const  {id: orderId} = req.params
-    const {status} = req.body
-    
-    if (!mongoose.Types.ObjectId.isValid(orderId)) {
-        throw new customError("Invalid Order ID", 400);
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    throw new customError("Invalid Order ID", 400);
+  }
+
+  //update the coupon
+  const orderUpdate = await order_schema.findByIdAndUpdate(
+    orderId,
+    {
+      status,
+    },
+    {
+      new: true,
+      runValidators: true,
     }
+  );
 
-    //update the coupon
-    const orderUpdate = await order_schema.findByIdAndUpdate(
-        orderId,
-        {
-            status
-        },{
-            new:true,
-            runValidators: true
-        })
+  if (!orderUpdate) {
+    throw new customError("Error while updating status.", 400);
+  }
 
-    if(!orderUpdate){
-        throw new customError("Error while updating status.",400)
-    }
+  res.status(200).json({
+    success: true,
+    orderUpdate,
+  });
+});
 
-    res.status(200).json({
-        success:true,
-        orderUpdate
-    })
-    
-})
-
-module.exports = {generateRazorpayID,generateOrder,getAllOrders,getMyOrders,updateOrderStatus}
+module.exports = {
+  generateRazorpayID,
+  generateOrder,
+  getAllOrders,
+  getMyOrders,
+  updateOrderStatus,
+};

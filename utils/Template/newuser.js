@@ -1,5 +1,5 @@
 const newUser = () => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -101,6 +101,7 @@ const newUser = () => {
   </div>
 </body>
 </html>
-` };
+`;
+};
 
 module.exports = newUser;

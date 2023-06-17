@@ -1,7 +1,7 @@
-const coupon_schema = require("../model/coupon_schema.js")
-const order_schema = require("../model/order_schema.js")
-const asyncHandler = require("../services/async_handler.js")
-const customError = require("../utils/custom_error.js")
+const coupon_schema = require("../model/coupon_schema.js");
+const order_schema = require("../model/order_schema.js");
+const asyncHandler = require("../services/async_handler.js");
+const customError = require("../utils/custom_error.js");
 
 /**********************************************************
  * @CREATE_COUPON
@@ -10,37 +10,36 @@ const customError = require("../utils/custom_error.js")
  * @description Only admin and Moderator can create the coupon
  * @returns Coupon Object with success message "Coupon Created SuccessFully"
  *********************************************************/
-const createCoupon = asyncHandler(async(req,resp)=>{
-    //get params
-    const {code,discount} = req.body
+const createCoupon = asyncHandler(async (req, resp) => {
+  //get params
+  const { code, discount } = req.body;
 
-    //validate
-    if(!(code || discount)){
-        throw new customError("Please provide all the required fields.",400)
-    }
+  //validate
+  if (!(code || discount)) {
+    throw new customError("Please provide all the required fields.", 400);
+  }
 
-    const duplicate = await coupon_schema.find({code})
+  const duplicate = await coupon_schema.find({ code });
 
-    if(duplicate.length > 0){
-        throw new customError("Coupon already exists with the same code.",400)
-    }
+  if (duplicate.length > 0) {
+    throw new customError("Coupon already exists with the same code.", 400);
+  }
 
-    const coupon = await coupon_schema.create({
-        code: code,
-        discount: discount
-    })
+  const coupon = await coupon_schema.create({
+    code: code,
+    discount: discount,
+  });
 
-    if(!coupon){
-        throw new customError("There was an error while creating a coupon.",400)
-    }
+  if (!coupon) {
+    throw new customError("There was an error while creating a coupon.", 400);
+  }
 
-    resp.status(200).json({
-        success: true,
-        message: "coupon was created successfully.",
-        coupon
-    })
-
-})
+  resp.status(200).json({
+    success: true,
+    message: "coupon was created successfully.",
+    coupon,
+  });
+});
 
 /**********************************************************
  * @DEACTIVATE_COUPON
@@ -50,31 +49,32 @@ const createCoupon = asyncHandler(async(req,resp)=>{
  * @returns Coupon Object with success message "Coupon Deactivated SuccessFully"
  *********************************************************/
 
-const deactiveCoupon = asyncHandler(async(req,res)=>{
-    //get couponID
-    const  {id: couponId} = req.params
+const deactiveCoupon = asyncHandler(async (req, res) => {
+  //get couponID
+  const { id: couponId } = req.params;
 
-    //deactive the coupon
-    const coupon = coupon_schema.findByIdAndUpdate(
-        couponId,
-        {
-            active: false
-        },{
-            new:true,
-            runValidators: true
-        })
-
-    if(!coupon){
-        throw new customError("Error while deactivating the coupon.",400)
+  //deactive the coupon
+  const coupon = coupon_schema.findByIdAndUpdate(
+    couponId,
+    {
+      active: false,
+    },
+    {
+      new: true,
+      runValidators: true,
     }
+  );
 
-    //send response
-    res.status(200).json({
-        success:true,
-        coupon
-    })
+  if (!coupon) {
+    throw new customError("Error while deactivating the coupon.", 400);
+  }
 
-})
+  //send response
+  res.status(200).json({
+    success: true,
+    coupon,
+  });
+});
 
 /**********************************************************
  * @UPDATE_COUPON
@@ -83,52 +83,52 @@ const deactiveCoupon = asyncHandler(async(req,res)=>{
  * @description Only admin and Moderator can update the coupon
  * @returns Success Message "Coupon updated SuccessFully"
  *********************************************************/
-const updateCoupon = asyncHandler(async(req,res)=>{
-    //get couponID
-    const  {id: couponId} = req.params
-    const {code,discount} = req.body
-    
-    //update the coupon
-    const coupon = await coupon_schema.findByIdAndUpdate(
-        couponId,
-        {
-            code,
-            discount
-        },{
-            new:true,
-            runValidators: true
-        })
+const updateCoupon = asyncHandler(async (req, res) => {
+  //get couponID
+  const { id: couponId } = req.params;
+  const { code, discount } = req.body;
 
-    if(!coupon){
-        throw new customError("Error while updating the coupon.",400)
+  //update the coupon
+  const coupon = await coupon_schema.findByIdAndUpdate(
+    couponId,
+    {
+      code,
+      discount,
+    },
+    {
+      new: true,
+      runValidators: true,
     }
+  );
 
-    //send response
-    res.status(200).json({
-        success:true,
-        coupon
-    })
+  if (!coupon) {
+    throw new customError("Error while updating the coupon.", 400);
+  }
 
-})
+  //send response
+  res.status(200).json({
+    success: true,
+    coupon,
+  });
+});
 
-const getCouponbycode = asyncHandler(async(req,res)=>{
-    //get couponID
-    const {code} = req.body
-    
-    //update the coupon
-    const coupon = await coupon_schema.find({code});
+const getCouponbycode = asyncHandler(async (req, res) => {
+  //get couponID
+  const { code } = req.body;
 
-    if(!coupon){
-        throw new customError("Invalid Coupon Code",400)
-    }
+  //update the coupon
+  const coupon = await coupon_schema.find({ code });
 
-    //send response
-    res.status(200).json({
-        success:true,
-        coupon
-    })
+  if (!coupon) {
+    throw new customError("Invalid Coupon Code", 400);
+  }
 
-})
+  //send response
+  res.status(200).json({
+    success: true,
+    coupon,
+  });
+});
 
 /**********************************************************
  * @DELETE_COUPON
@@ -138,34 +138,33 @@ const getCouponbycode = asyncHandler(async(req,res)=>{
  * @returns Success Message "Coupon Deleted SuccessFully"
  *********************************************************/
 
-const deleteCoupon = asyncHandler(async(req,res)=>{
-    //get couponID
-    const  {id: couponId} = req.params
-    
-    //get coupon code
-    const getcoupon = await coupon_schema.findById(couponId)
-    const couponcode = getcoupon.code;
-    
-    const orders = await order_schema.find({"coupon":couponcode})
+const deleteCoupon = asyncHandler(async (req, res) => {
+  //get couponID
+  const { id: couponId } = req.params;
 
-    if(orders.length > 0){
-        throw new customError("Used Coupon can not be deleted.",400)
-    }
+  //get coupon code
+  const getcoupon = await coupon_schema.findById(couponId);
+  const couponcode = getcoupon.code;
 
-    //delete the coupon
-    const coupon = await coupon_schema.findByIdAndDelete(couponId)
+  const orders = await order_schema.find({ coupon: couponcode });
 
-    if(!coupon){
-        throw new customError("Error while deleting the coupon.",400)
-    }
+  if (orders.length > 0) {
+    throw new customError("Used Coupon can not be deleted.", 400);
+  }
 
-    //send response
-    res.status(200).json({
-        success:true,
-        coupon
-    })
+  //delete the coupon
+  const coupon = await coupon_schema.findByIdAndDelete(couponId);
 
-})
+  if (!coupon) {
+    throw new customError("Error while deleting the coupon.", 400);
+  }
+
+  //send response
+  res.status(200).json({
+    success: true,
+    coupon,
+  });
+});
 
 /**********************************************************
  * @GET_ALL_COUPONS
@@ -175,17 +174,24 @@ const deleteCoupon = asyncHandler(async(req,res)=>{
  * @returns allCoupons Object
  *********************************************************/
 
-const getAllCoupons = asyncHandler(async(req,res)=>{
-    const coupons = await coupon_schema.find()
+const getAllCoupons = asyncHandler(async (req, res) => {
+  const coupons = await coupon_schema.find();
 
-    if(!coupons){
-        throw new customError("No Coupons Found.",400)
-    }
+  if (!coupons) {
+    throw new customError("No Coupons Found.", 400);
+  }
 
-    res.status(200).json({
-        success:"true",
-        coupons
-    })
-})
+  res.status(200).json({
+    success: "true",
+    coupons,
+  });
+});
 
-module.exports = {createCoupon,deactiveCoupon,deleteCoupon,getAllCoupons,updateCoupon,getCouponbycode}
+module.exports = {
+  createCoupon,
+  deactiveCoupon,
+  deleteCoupon,
+  getAllCoupons,
+  updateCoupon,
+  getCouponbycode,
+};

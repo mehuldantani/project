@@ -1,5 +1,5 @@
-const orderPlaced = (name, navigateLink,orderid,orderdate,amount) => {
-    return `<!DOCTYPE html>
+const orderPlaced = (name, navigateLink, orderid, orderdate, amount) => {
+  return `<!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
